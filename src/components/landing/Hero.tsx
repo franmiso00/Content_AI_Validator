@@ -57,16 +57,16 @@ export function Hero({ onValidate, isValidating }: HeroProps) {
                     <div className="space-y-4">
                         <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full text-white text-sm font-medium mb-4">
                             <Sparkles className="h-4 w-4" />
-                            Validación con IA en segundos
+                            Investigación Estratégica con Datos Reales
                         </div>
 
                         <h1 className="text-5xl md:text-7xl font-black text-white leading-tight tracking-tight">
-                            Valida ideas de contenido<br />
-                            <span className="text-cyan-100">antes de crearlas</span>
+                            Toma decisiones de<br />
+                            <span className="text-cyan-100">contenido con menos riesgo</span>
                         </h1>
 
                         <p className="text-xl md:text-2xl text-white/90 max-w-2xl mx-auto leading-relaxed">
-                            Descubre si tu idea tiene demanda real usando conversaciones de Reddit
+                            Analizamos señales de demanda en comunidades reales para que no crees contenido a ciegas.
                         </p>
                     </div>
 

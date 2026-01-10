@@ -1,9 +1,32 @@
 export interface PerplexityResponse {
     demand_score: number;
+    demand_interpretation: string; // e.g., "Demanda sólida en nicho emergente"
     demand_summary: string;
+    strategic_recommendation: {
+        verdict: "create" | "pilot" | "reconsider";
+        reasoning: string[];
+        target_fit: string;
+        success_conditions: string;
+    };
+    data_signals: {
+        conversations_analyzed: number;
+        recency: string;
+        engagement_type: string;
+    };
+    business_impact: {
+        primary_objective: "leads" | "authority" | "sales";
+        monetization_potential: string;
+        commercial_risks: string;
+    };
     pain_points: string[];
     questions: string[];
-    content_angles: string[];
+    content_angles: {
+        format: string;
+        hook: string;
+        complexity: "básico" | "avanzado";
+        description: string;
+    }[];
+    not_recommended_if: string[];
     confidence_score: number;
 }
 
@@ -13,28 +36,52 @@ export async function validateIdea(topic: string, audience?: string): Promise<Pe
         throw new Error("PERPLEXITY_API_KEY is not set");
     }
 
-    const systemPrompt = `You are a market research API that ONLY outputs valid JSON. Do not include any explanatory text, markdown formatting, or conversational responses.
-
-Analyze the following content idea by searching Reddit and online discussions:
+    const systemPrompt = `You are a strategic market research API for high-ticket businesses. Your goal is to help users decide if a content idea is worth the investment.
+    
+Output ONLY a valid JSON object. Do not include markdown, code blocks, or explanations.
 
 Topic: "${topic}"
 ${audience ? `Target Audience: "${audience}"` : ""}
 
-Output ONLY this JSON structure (no other text):
+Required JSON Structure:
 {
   "demand_score": <number 0-100>,
-  "demand_summary": "<2-sentence summary of current discussions>",
+  "demand_interpretation": "<short semantic category: e.g. 'Demanda sólida en nicho emergente'>",
+  "demand_summary": "<2-sentence overview of market state>",
+  "strategic_recommendation": {
+    "verdict": "create" (green) | "pilot" (yellow) | "reconsider" (red),
+    "reasoning": ["<reason 1>", "<reason 2>"],
+    "target_fit": "<who this is specifically for>",
+    "success_conditions": "<specific conditions for success>"
+  },
+  "data_signals": {
+    "conversations_analyzed": <number of relevant threads/discussions found>,
+    "recency": "<freshness of data, e.g. 'frecuente últimos 60 días'>",
+    "engagement_type": "<primary type: e.g. preguntas, quejas, debates>"
+  },
+  "business_impact": {
+    "primary_objective": "leads" | "authority" | "sales",
+    "monetization_potential": "<potential via newsletter, upsell, service, etc.>",
+    "commercial_risks": "<risks like small niche, high legal compliance, etc.>"
+  },
   "pain_points": ["<pain 1>", "<pain 2>", "<pain 3>"],
   "questions": ["<question 1>", "<question 2>", "<question 3>"],
-  "content_angles": ["<angle 1>", "<angle 2>", "<angle 3>"],
+  "content_angles": [
+    {
+      "format": "<recommended format: e.g. newsletter, guide, technical post>",
+      "hook": "<main hook/headline idea>",
+      "complexity": "básico" | "avanzado",
+      "description": "<actionable description focused on reduction of risk>"
+    }
+  ],
+  "not_recommended_if": ["<condition 1>", "<condition 2>"],
   "confidence_score": <number 0-100>
 }
 
 Rules:
-- Output ONLY valid JSON, nothing else
-- If no data found, use empty arrays and score 0
-- Do not add explanations or markdown
-- Start your response with { and end with }`;
+- Be analytical and serious. Avoid hype words like "viral" or "magical".
+- Focus on "reduction of risk" and "informed decisions".
+- Response must start with { and end with }. No other text.`;
 
 
     try {

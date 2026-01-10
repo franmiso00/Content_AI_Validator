@@ -8,10 +8,34 @@ import { toast } from "sonner";
 
 interface ValidationResult {
   demand_score: number;
+  demand_interpretation: string;
   demand_summary: string;
+  strategic_recommendation: {
+    verdict: "create" | "pilot" | "reconsider";
+    reasoning: string[];
+    target_fit: string;
+    success_conditions: string;
+  };
+  data_signals: {
+    conversations_analyzed: number;
+    recency: string;
+    engagement_type: string;
+  };
+  business_impact: {
+    primary_objective: "leads" | "authority" | "sales";
+    monetization_potential: string;
+    commercial_risks: string;
+  };
   pain_points: string[];
   questions: string[];
-  content_angles: string[];
+  content_angles: {
+    format: string;
+    hook: string;
+    complexity: "básico" | "avanzado";
+    description: string;
+  }[];
+  not_recommended_if: string[];
+  confidence_score: number;
   remaining_validations?: number;
 }
 
