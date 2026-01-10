@@ -13,22 +13,29 @@ export async function validateIdea(topic: string, audience?: string): Promise<Pe
         throw new Error("PERPLEXITY_API_KEY is not set");
     }
 
-    const systemPrompt = `
-You are an expert market researcher and content strategist. Your goal is to validate content ideas by analyzing real-world demand signals from Reddit, forums, and social discussions.
+    const systemPrompt = `You are a market research API that ONLY outputs valid JSON. Do not include any explanatory text, markdown formatting, or conversational responses.
 
-You must output a STRICT JSON object answering the following about the topic:
-1. demand_score: A number 0-100 indicating how actively this is discussed.
-2. demand_summary: A 2-sentence summary of the current conversation/sentiment.
-3. pain_points: Array of 3 specific problems/frustrations users express.
-4. questions: Array of 3 common questions users are asking.
-5. content_angles: Array of 3 unique, high-value content angles to address this.
-6. confidence_score: A number 0-100 indicating the quality of data found (not virality).
+Analyze the following content idea by searching Reddit and online discussions:
 
-Input Topic: "${topic}"
+Topic: "${topic}"
 ${audience ? `Target Audience: "${audience}"` : ""}
 
-Use current data. Do not hallucinate. If no data is found, set scores to 0.
-`;
+Output ONLY this JSON structure (no other text):
+{
+  "demand_score": <number 0-100>,
+  "demand_summary": "<2-sentence summary of current discussions>",
+  "pain_points": ["<pain 1>", "<pain 2>", "<pain 3>"],
+  "questions": ["<question 1>", "<question 2>", "<question 3>"],
+  "content_angles": ["<angle 1>", "<angle 2>", "<angle 3>"],
+  "confidence_score": <number 0-100>
+}
+
+Rules:
+- Output ONLY valid JSON, nothing else
+- If no data found, use empty arrays and score 0
+- Do not add explanations or markdown
+- Start your response with { and end with }`;
+
 
     try {
         const response = await fetch("https://api.perplexity.ai/chat/completions", {
@@ -38,32 +45,54 @@ Use current data. Do not hallucinate. If no data is found, set scores to 0.
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({
-                model: "sonar-reasoning-pro",
+                model: "sonar",  // Changed from sonar-reasoning-pro
                 messages: [
-                    { role: "system", content: "You are a helpful JSON-only API." },
+                    {
+                        role: "system",
+                        content: "You are a market research API. You MUST respond with valid JSON only. No explanations, no markdown, just pure JSON."
+                    },
                     { role: "user", content: systemPrompt }
                 ],
-                // Force JSON output if possible via prompt, but Perplexity is chat-based.
-                // We rely on the model following instructions.
+                temperature: 0.2,  // Lower temperature for more consistent output
+                max_tokens: 2000,
             })
         });
 
         if (!response.ok) {
-            console.error("Perplexity API Error:", await response.text());
-            throw new Error("Failed to fetch from Perplexity");
+            const errorText = await response.text();
+            console.error("[perplexity] API Error:", response.status, errorText);
+            throw new Error(`Perplexity API error: ${response.status} - ${errorText}`);
         }
 
         const data = await response.json();
         const content = data.choices[0]?.message?.content;
 
+        if (!content) {
+            console.error("[perplexity] No content in response");
+            throw new Error("No content returned from Perplexity");
+        }
+
         // cleanup markdown code blocks if present
-        const cleanContent = content.replace(/```json\n?|\n?```/g, "").trim();
+        let cleanContent = content.replace(/```json\n?|\n?```/g, "").trim();
 
-        return JSON.parse(cleanContent);
+        // If response doesn't start with {, try to extract JSON
+        if (!cleanContent.startsWith("{")) {
+            console.warn("[perplexity] Response doesn't start with JSON, attempting to extract");
+            const jsonMatch = cleanContent.match(/\{[\s\S]*\}/);
+            if (jsonMatch) {
+                cleanContent = jsonMatch[0];
+            } else {
+                console.error("[perplexity] Could not extract JSON from response:", cleanContent);
+                throw new Error("Perplexity returned non-JSON response. Please try again.");
+            }
+        }
 
-    } catch (error) {
-        console.error("Validation failed:", error);
-        // Return a fallback or rethrow
+        const parsed = JSON.parse(cleanContent);
+        return parsed;
+
+    } catch (error: any) {
+        console.error("[perplexity] Validation failed:", error);
+        console.error("[perplexity] Error message:", error?.message);
         throw error;
     }
 }

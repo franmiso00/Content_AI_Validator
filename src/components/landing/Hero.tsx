@@ -15,10 +15,28 @@ export function Hero({ onValidate, isValidating }: HeroProps) {
     const [topic, setTopic] = useState("");
     const [audience, setAudience] = useState("");
 
+    const [loadingMessage, setLoadingMessage] = useState("Analizando...");
+
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         if (topic.trim()) {
+            const messages = [
+                "Escaneando Reddit...",
+                "Identificando dolores...",
+                "Analizando demanda...",
+                "Generando insights...",
+                "Casi listo..."
+            ];
+            let i = 0;
+            const interval = setInterval(() => {
+                setLoadingMessage(messages[i % messages.length]);
+                i++;
+            }, 2500);
+
             onValidate(topic, audience);
+
+            // Note: interval should ideally be cleared by parent/cleanup
+            setTimeout(() => clearInterval(interval), 30000);
         }
     };
 
@@ -84,7 +102,7 @@ export function Hero({ onValidate, isValidating }: HeroProps) {
                                     {isValidating ? (
                                         <>
                                             <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-                                            Analizando...
+                                            {loadingMessage}
                                         </>
                                     ) : (
                                         <>

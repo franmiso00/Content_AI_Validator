@@ -60,10 +60,16 @@ export async function POST(req: NextRequest) {
             ...result,
             remaining_validations: remaining,
         });
-    } catch (error) {
-        console.error("Demo validation error:", error);
+    } catch (error: any) {
+        console.error("[validate-demo] Error:", error);
+        console.error("[validate-demo] Error message:", error?.message);
+        console.error("[validate-demo] Error stack:", error?.stack);
+
         return NextResponse.json(
-            { error: "Failed to validate idea. Please try again." },
+            {
+                error: "Failed to validate idea. Please try again.",
+                details: process.env.NODE_ENV === "development" ? error?.message : undefined
+            },
             { status: 500 }
         );
     }
