@@ -1,0 +1,65 @@
+{
+  "demand_score": 86,
+  "demand_interpretation": "alta demanda y alta competencia",
+  "demand_summary": "El interés por contenidos sobre mejores herramientas de IA para productividad en 2025 es muy elevado, impulsado por profesionales que buscan optimizar tiempo y procesos. La competencia también es fuerte, por lo que el enfoque, la profundidad y la segmentación serán críticos para destacar.",
+  "strategic_recommendation": {
+    "verdict": "pilot",
+    "reasoning": [
+      "Tema con interés sostenido y en crecimiento alrededor de IA aplicada a productividad y automatización del trabajo del conocimiento",
+      "Mucha oferta genérica de listados de herramientas, por lo que un contenido más estratégico (casos reales, ROI, comparativas accionables) puede diferenciarse",
+      "Buen encaje para negocios high-ticket que venden software, consultoría o formación premium en IA/productividad",
+      "Riesgo de obsolescencia rápida si no se plantea como marco estratégico y actualizable, más que como simple listado de apps"
+    ],
+    "target_fit": "Fundadores, directores de operaciones, consultores, agencias y equipos de revenue que venden soluciones B2B de ticket medio/alto y quieren usar IA para escalar productividad sin aumentar headcount.",
+    "success_conditions": "Definir un nicho claro (p. ej. equipos comerciales B2B, agencias de marketing, consultores) y seleccionar pocas herramientas pero con análisis profundo de casos de uso, flujos de trabajo concretos y métricas de impacto; incluir frameworks de decisión (cuándo usar qué tipo de IA), ejemplos de implementación paso a paso y un puente claro hacia tu oferta high-ticket (auditoría, implementación, formación in-house)."
+  },
+  "data_signals": {
+    "conversations_analyzed": 176,
+    "recency": "últimos 30-60 días",
+    "engagement_type": "búsquedas informativas, hilos en redes profesionales y debates en comunidades sobre IA aplicada al trabajo diario"
+  },
+  "business_impact": {
+    "primary_objective": "leads",
+    "monetization_potential": "Alto para captar leads cualificados que ya tienen presupuesto para mejorar productividad (p. ej. empresas que buscan implantar IA interna, comprar software avanzado o contratar consultoría/formación personalizada). El contenido puede nutrir un funnel hacia diagnósticos pagados, programas de transformación digital o licencias de software premium.",
+    "commercial_risks": "Riesgo de atraer demasiado tráfico poco cualificado que solo busca herramientas gratuitas; necesidad de actualización frecuente a medida que aparecen nuevas soluciones; posible percepción de contenido genérico si no se orienta a decisiones de negocio y retorno económico."
+  },
+  "pain_points": [
+    "Sobrecarga de herramientas de IA y dificultad para distinguir cuáles generan impacto real en productividad",
+    "Falta de criterios claros para evaluar y priorizar herramientas según el tipo de trabajo y el tamaño del equipo",
+    "Temor a invertir tiempo en implementar soluciones que luego el equipo no adopta",
+    "Dudas sobre seguridad de datos y cumplimiento al introducir herramientas de IA en procesos críticos",
+    "Dificultad para conectar el uso de IA con métricas concretas de negocio (tiempo ahorrado, coste por tarea, ingresos adicionales)"
+  },
+  "questions": [
+    "¿Qué pocas herramientas de IA tienen mayor impacto real en productividad para mi tipo de negocio y equipo?",
+    "¿Cómo integrarlas de forma segura y sin fricción en los flujos de trabajo actuales?",
+    "¿Qué ROI concreto puedo esperar y en qué horizonte de tiempo si invierto en estas herramientas y en formación?"
+  },
+  "content_angles": [
+    {
+      "format": "guía estratégica larga (artículo o whitepaper)",
+      "hook": "Las 7 herramientas de IA que realmente moverán la aguja de tu productividad en 2025 (con casos de uso y métricas reales)",
+      "complexity": "avanzado",
+      "description": "En lugar de un listado superficial, estructurar la guía por tipo de proceso (planificación, comunicación, análisis, automatización) y, para cada herramienta elegida, mostrar un caso real con antes/después, horas ahorradas, impacto en ingresos y requisitos de implementación, incluyendo checklist para directivos."
+    },
+    {
+      "format": "webinar o masterclass en vivo",
+      "hook": "Cómo rediseñar tu semana de trabajo con IA: implementación práctica de las mejores herramientas de 2025 en un negocio B2B",
+      "complexity": "avanzado",
+      "description": "Sesión práctica donde se construyen 2-3 flujos completos (p. ej. prospección comercial, reporting, creación de propuestas) usando herramientas de IA específicas, mostrando pantalla, configuración y el impacto estimado en horas y coste; cerrar con una invitación a un proyecto piloto o auditoría pagada."
+    },
+    {
+      "format": "benchmark descargable / matriz de decisión",
+      "hook": "Matriz 2025: compara las principales herramientas de IA para productividad según seguridad, coste, curva de aprendizaje e impacto esperado",
+      "complexity": "básico",
+      "description": "Documento visual donde se comparan pocas herramientas clave en una matriz de decisión con criterios orientados a directivos (seguridad, compliance, coste total, facilidad de adopción, impacto en horas ahorradas), incluyendo recomendaciones por tipo de empresa y CTA a asesoría personalizada."
+    }
+  ],
+  "not_recommended_if": [
+    "Tu modelo de negocio no tiene una oferta clara de alto valor relacionada con IA, productividad o transformación digital a la que dirigir a los leads",
+    "No puedes actualizar el contenido al menos una o dos veces al año para mantener la relevancia de las herramientas",
+    "Buscas resultados de venta directa inmediata y no estás dispuesto a usar este contenido como activo de generación y nutrición de leads",
+    "Tu audiencia objetivo es muy poco digitalizada o tiene baja predisposición a adoptar nuevas herramientas tecnológicas"
+  },
+  "confidence_score": 82
+}

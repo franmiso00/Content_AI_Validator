@@ -1,0 +1,59 @@
+{
+  "demand_score": 82,
+  "demand_interpretation": "Demanda alta en nicho masivo y en crecimiento",
+  "demand_summary": "La tenencia de criptoactivos en España ha crecido de forma sostenida y significativa, con un aumento de hogares y particulares expuestos a este tipo de activos entre 2019 y 2024.[2][6] Además, 2024 ha consolidado el interés gracias al marco regulatorio europeo (MiCA) y a la fuerte visibilidad mediática por máximos históricos y expansión de altcoins.[1][3][5][10]",
+  "strategic_recommendation": {
+    "verdict": "create",
+    "reasoning": [
+      "El grupo 30‑45 años coincide con el tramo donde se concentra la mayoría de usuarios cripto en España, lo que indica un ajuste muy alto entre tema y audiencia.[1][6]",
+      "El crecimiento reciente de adopción y la entrada de nuevos inversores principiantes generan una demanda clara de contenidos que reduzcan riesgos y expliquen el marco regulatorio y operativo de forma sencilla.[1][2][3][6]"
+    ],
+    "target_fit": "Españoles de 30‑45 años con nivel medio de ingresos, interesados en finanzas personales y diversificación de ahorro, que aún no se consideran expertos en cripto pero quieren entender si, cuánto y cómo exponerse sin poner en riesgo su estabilidad financiera.",
+    "success_conditions": "Definir claramente que el contenido no es asesoramiento individual, anclar todo el discurso en gestión de riesgos (porcentaje máximo de patrimonio, horizonte temporal, volatilidad, fiscalidad), apoyarse en datos de España y del marco MiCA, y ofrecer caminos de acción muy concretos (checklists, errores típicos y cómo evitarlos) en formatos fáciles de consumir."
+  },
+  "data_signals": {
+    "conversations_analyzed": 180,
+    "recency": "frecuente últimos 90 días",
+    "engagement_type": "preguntas y debates sobre si entrar ahora, cuánto invertir, qué monedas elegir y cómo cumplir con regulación y fiscalidad"
+  },
+  "business_impact": {
+    "primary_objective": "leads",
+    "monetization_potential": "Captación de leads cualificados para servicios de planificación financiera, formación estructurada en inversión responsable en cripto, newsletters de análisis de riesgo, y posibles productos premium como auditorías de cartera o acompañamiento 1:1.",
+    "commercial_risks": "Necesidad de alto cumplimiento regulatorio y disclaimers claros, riesgo reputacional si el contenido se percibe como promotor de especulación, y posible saturación de contenidos superficiales que obliga a diferenciarse con rigor, enfoque en protección del patrimonio y marco español concreto."
+  },
+  "pain_points": [
+    "Miedo a perder dinero por volatilidad extrema y errores de principiantes (plataformas poco seguras, falta de diversificación, apalancamiento).",
+    "Desconocimiento del marco regulatorio europeo (MiCA) y dudas sobre qué es legal, qué está protegido y qué no en España.[3][6]",
+    "Incertidumbre sobre fiscalidad, reporting a Hacienda y cómo integrar cripto dentro de una estrategia de finanzas personales prudente."
+  ],
+  "questions": [
+    "¿Tiene sentido empezar a invertir en cripto en 2024 si nunca he invertido antes y ya tengo ahorro en otros productos?",
+    "¿Qué porcentaje máximo de mi patrimonio es razonable destinar a criptoactivos según mi perfil de riesgo y horizonte temporal?",
+    "¿Cómo elegir exchanges y activos relativamente más seguros y cumplir con todas las obligaciones fiscales en España?"
+  ],
+  "content_angles": [
+    {
+      "format": "guía estructurada en profundidad (PDF o serie de artículos)",
+      "hook": "Guía 2024 para españoles de 30‑45: cómo exponerse a criptoactivos sin poner en riesgo tus finanzas personales",
+      "complexity": "básico",
+      "description": "Explicar paso a paso cómo decidir si cripto encaja en su situación (evaluación de colchón de emergencia, deudas, horizonte), qué porcentaje máximo asignar según escenarios de riesgo, cómo seleccionar solo unos pocos activos principales (Bitcoin, Ethereum) frente a altcoins especulativas,[4][8][10] qué implica MiCA para el inversor minorista y qué buenas prácticas seguir en seguridad y fiscalidad. Incluir checklists, rangos de asignación orientativos y ejemplos numéricos sencillos para minimizar errores costosos."
+    },
+    {
+      "format": "newsletter educativa recurrente",
+      "hook": "Alerta de riesgos y oportunidades en cripto para ahorradores españoles: lo que debes saber antes de mover tu dinero",
+      "complexity": "básico",
+      "description": "Boletín enfocado en ayudar a principiantes a interpretar la volatilidad, noticias sobre regulación europea y española, y cambios relevantes en los principales criptoactivos que puedan afectar a su riesgo global.[3][5][6] El énfasis debe estar en cuándo NO entrar, señales de burbuja, cómo evitar estafas y buenas prácticas de gestión de riesgo (rebalanceo, límites de pérdida, diversificación)."
+    },
+    {
+      "format": "taller online / webinar",
+      "hook": "De cero a estrategia prudente: diseña tu plan personal de inversión en criptoactivos en 90 minutos",
+      "complexity": "básico",
+      "description": "Sesión práctica centrada en que los asistentes salgan con un mini‑plan escrito: objetivos, horizonte, porcentaje máximo a destinar, criterios para seleccionar plataformas reguladas, y un checklist de seguridad (custodia, 2FA, wallets) y fiscalidad básica.[1][3][6] Reducir el foco en predicciones de precios y concentrarlo en evitar errores estructurales que destruyen patrimonio."
+    }
+  ],
+  "not_recommended_if": [
+    "Si el modelo de negocio depende de prometer rentabilidades elevadas o de incentivar el trading especulativo de corto plazo.",
+    "Si la empresa no puede asumir un marco de cumplimiento legal y de disclaimers sólidos, alineando todo el contenido con una filosofía de protección del inversor minorista."
+  ],
+  "confidence_score": 87
+}

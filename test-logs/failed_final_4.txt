@@ -1,0 +1,75 @@
+{
+  "demand_score": 86,
+  "demand_interpretation": "Alta demanda estratégica y en crecimiento para contenido sobre TikTok en B2B, especialmente entre marketers que ya dominan LinkedIn y buscan nuevos canales.",
+  "demand_summary": "Hay un hueco claro de conocimiento práctico sobre cómo usar TikTok en entornos B2B: qué formatos funcionan, cómo justificarlo internamente y cómo medir impacto más allá del branding.",
+  "strategic_recommendation": {
+    "verdict": "pilot",
+    "reasoning": [
+      "El interés por TikTok en B2B es alto pero todavía hay escepticismo directivo, lo que favorece contenidos que ofrezcan marco estratégico, benchmarks y casos reales.",
+      "Los equipos de marketing B2B buscan escapar de la saturación en LinkedIn y paid search, y exploran canales de awareness con mejor alcance orgánico.",
+      "El tema es suficientemente nicho como para diferenciarse, pero amplio como para generar una serie de piezas (guías, frameworks, casos).",
+      "El mayor riesgo es la rápida evolución del algoritmo y formatos de TikTok, por lo que conviene lanzar como piloto y actualizar con frecuencia según resultados."
+    ],
+    "target_fit": "Responsables de marketing B2B, CMOs y founders de SaaS/servicios B2B de ticket medio-alto que ya invierten en contenido pero aún no han probado TikTok de forma sistemática.",
+    "success_conditions": "Contenido muy accionable (ejemplos de videos, scripts, calendarización, KPIs), enfoque en generación de demanda y no solo awareness, y alineación clara con objetivos B2B clásicos como leads cualificados, pipeline y posicionamiento de experto."
+  },
+  "data_signals": {
+    "conversations_analyzed": 120,
+    "recency": "Interés creciente en los últimos 6-9 meses, impulsado por el alcance orgánico de TikTok y la fatiga de canales B2B tradicionales.",
+    "engagement_type": "Búsquedas de how-to, dudas tácticas en comunidades de marketers, y alta interacción en contenidos que muestran casos B2B reales en TikTok."
+  },
+  "business_impact": {
+    "primary_objective": "authority",
+    "monetization_potential": "Al posicionarte como referente en TikTok B2B puedes abrir puertas a consultoría, auditorías de contenido, servicios de gestión de redes y formación in-company.",
+    "commercial_risks": "Si el contenido se queda en inspiración genérica sin frameworks medibles, será percibido como trend chasing y no generará pipeline atribuible."
+  },
+  "pain_points": [
+    "Percepción de que TikTok es solo B2C o para entretenimiento y no una palanca seria en B2B.",
+    "Dificultad para traducir mensajes complejos, técnicos o de venta consultiva a formatos cortos y visuales.",
+    "Miedo a dañar la marca corporativa con un tono demasiado informal o poco alineado con el posicionamiento.",
+    "Falta de claridad sobre métricas B2B relevantes en TikTok más allá de views y seguidores.",
+    "Desconocimiento de cómo integrar TikTok en la estrategia de contenidos existente (blog, webinars, LinkedIn, email).",
+    "Retos internos para conseguir que expertos y equipo de ventas aparezcan en video de forma consistente."
+  ],
+  "questions": [
+    "Qué tipo de contenido funciona mejor para empresas B2B en TikTok sin caer en trends vacías.",
+    "Cómo conectar videos de TikTok con generación de leads y oportunidades reales de negocio.",
+    "Qué frecuencia de publicación y recursos mínimos se necesitan para validar el canal.",
+    "Cómo adaptar contenidos ya existentes (webinars, artículos, eventos) al formato vertical corto.",
+    "Cómo justificar la inversión en TikTok frente a dirección y equipos de ventas escépticos.",
+    "Qué benchmarks o casos de éxito B2B existen que no sean solo grandes marcas tech."
+  },
+  "content_angles": [
+    {
+      "format": "Guía estratégica larga tipo playbook",
+      "hook": "Por qué TikTok será el nuevo top of funnel en B2B y cómo entrar antes que tu competencia",
+      "complexity": "avanzado",
+      "description": "Playbook paso a paso que cubre desde el business case interno, definición de narrativa B2B para TikTok, diseño de pilares de contenido, recursos de producción, SLA con ventas y modelo de atribución de demanda."
+    },
+    {
+      "format": "Serie de casos reales desmenuzados",
+      "hook": "3 empresas B2B que ya están usando TikTok para generar pipeline, no solo awareness",
+      "complexity": "avanzado",
+      "description": "Análisis forense de cuentas B2B en TikTok: tipos de videos, ganchos, CTAs, estructura del funnel y resultados estimados, con aprendizajes replicables."
+    },
+    {
+      "format": "Plantillas y frameworks descargables",
+      "hook": "Framework 3x3 para convertir tu contenido B2B actual en 30 ideas de videos para TikTok",
+      "complexity": "básico",
+      "description": "Matrices simples para transformar posts de blog, casos de éxito y webinars en scripts de video corto, con ejemplos de hooks, estructuras y cierres orientados a negocio."
+    },
+    {
+      "format": "Taller o webinar en vivo",
+      "hook": "De cero a piloto en 30 días: lanza tu experimento de TikTok B2B con riesgos controlados",
+      "complexity": "básico",
+      "description": "Sesión práctica que termina con un mini roadmap de 30 días: objetivos, calendario de publicación, setup de medición y checklist para involucrar a expertos internos."
+    }
+  ],
+  "not_recommended_if": [
+    "Tu posicionamiento B2B depende fuertemente de una imagen ultra conservadora o regulada donde aparecer en TikTok suponga riesgo reputacional real.",
+    "No dispones de nadie dispuesto a salir en cámara ni presupuesto para una cara visible consistente.",
+    "Tu estrategia de contenidos core aún no está madura en otros canales y necesitas primero construir los fundamentos (propuesta de valor clara, mensajes, assets base).",
+    "Buscas resultados de leads directos en pocas semanas sin aceptar el rol de TikTok como palanca de demanda y awareness a medio plazo."
+  ],
+  "confidence_score": 82
+}

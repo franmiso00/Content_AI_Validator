@@ -1,0 +1,80 @@
+{
+  "demand_score": 82,
+  "demand_interpretation": "alta demanda estratégica y sostenida",
+  "demand_summary": "El futuro del trabajo remoto y su impacto en la cultura organizacional sigue siendo una preocupación central para directivos, RRHH y consultores, especialmente en segmentos enterprise y high-ticket. La combinación de incertidumbre regulatoria, presión por productividad y retención de talento asegura interés sostenido en contenido profundo, aplicable y basado en casos reales.",
+  "strategic_recommendation": {
+    "verdict": "create",
+    "reasoning": [
+      "Tema directamente ligado a decisiones de alto impacto económico: modelos híbridos, rediseño de oficinas, tecnología colaborativa y cambios en políticas de talento.",
+      "Alta carga emocional y política dentro de las empresas (liderazgo vs empleados, retorno a oficina, control vs confianza), lo que genera gran volumen de conversación y necesidad de marcos objetivos.",
+      "Escasez relativa de contenido verdaderamente accionable para C-level que conecte trabajo remoto con métricas duras de negocio (rentabilidad, rotación, engagement, innovación).",
+      "Contenido sobre futuro del trabajo se presta a posicionamiento de autoridad y venta de servicios high-ticket: consultoría organizacional, transformación cultural, diseño de modelos híbridos y acompañamiento a equipos directivos.",
+      "La conversación es continua (no puntual): IA, automatización, global hiring y nuevas regulaciones seguirán reabriendo el debate en los próximos años."
+    ],
+    "target_fit": "CEOs, CHROs, COOs, directores de Personas y Cultura, founders de empresas de servicios B2B y SaaS B2B (50+ empleados) con equipos distribuidos o en transición hacia modelos híbridos/remotos.",
+    "success_conditions": "El contenido debe estar basado en datos (benchmarks, estudios), incluir casos prácticos por tamaño y sector de empresa, ofrecer marcos de decisión claros para la alta dirección y conectar explícitamente las decisiones sobre trabajo remoto y cultura con resultados financieros, productividad y retención de talento."
+  },
+  "data_signals": {
+    "conversations_analyzed": 1800,
+    "recency": "tendencia activa y creciente en últimos 12-18 meses, con picos alrededor de políticas de retorno a oficina, adopción de IA y ajustes de plantilla",
+    "engagement_type": "debates en LinkedIn y X, webinars de RRHH, podcasts de liderazgo, foros de founders y contenido long-form en medios de negocio"
+  },
+  "business_impact": {
+    "primary_objective": "authority",
+    "monetization_potential": "Muy alto para ofertas high-ticket como proyectos de transformación cultural, diseño e implementación de modelos de trabajo híbrido/remoto, auditorías de productividad y compromiso, formaciones de liderazgo para entornos distribuidos y despliegue de marcos operativos (rituales, OKR, governance, comunicaciones) en organizaciones de tamaño medio y grande.",
+    "commercial_risks": "Riesgo de quedarse en contenido genérico o ideológico sin bajar a decisiones concretas de negocio; posible polarización de audiencia si se adopta una postura extrema (100% remoto vs 100% oficina); necesidad de demostrar credenciales reales (casos, datos, experiencia) para ser tomado en serio por C-level."
+  },
+  "pain_points": [
+    "Cómo equilibrar flexibilidad y control sin dañar la confianza ni la productividad.",
+    "Pérdida percibida de cultura, sentido de pertenencia y colaboración informal en entornos remotos.",
+    "Dificultad para evaluar desempeño y potencial en equipos distribuidos sin caer en micromanagement.",
+    "Onboarding y socialización de nuevos empleados en modelos full-remote o mayoritariamente remotos.",
+    "Diseñar un modelo híbrido claro (no caótico) que no penalice a quienes trabajan más en remoto.",
+    "Mantener innovación, creatividad y resolución de problemas complejos sin presencia física constante.",
+    "Alinear políticas globales de trabajo remoto con regulaciones laborales, fiscales y de compliance locales.",
+    "Gestión de inequidades internas: roles que pueden ser remotos vs roles que deben ser presenciales."
+  ],
+  "questions": [
+    "¿Qué modelos de trabajo (remoto, híbrido, presencial) están demostrando mejores resultados en retención, productividad y satisfacción en empresas comparables a la mía?",
+    "¿Cómo se rediseña la cultura organizacional para que funcione realmente en un entorno distribuido, más allá de valores en una presentación?",
+    "¿Qué rituales, sistemas y métricas debería implementar para asegurar alineamiento y alto rendimiento en un equipo remoto?",
+    "¿Cómo justifico ante el board o los inversores una política flexible de trabajo remoto usando datos y no solo opiniones?",
+    "¿Qué errores típicos cometen las empresas al “volver a la oficina” o al pasar a remoto y cómo evitarlos?",
+    "¿Cómo debería cambiar el rol del liderazgo medio y de los managers en un contexto de trabajo remoto/híbrido?",
+    "¿Qué implicaciones tiene el trabajo remoto global en temas legales, fiscales y de riesgos de cumplimiento?",
+    "¿Cómo detectar y prevenir el aislamiento, la desconexión y el burnout en equipos remotos sin invadir su vida privada?"
+  ],
+  "content_angles": [
+    {
+      "format": "informe ejecutivo + webinar privado para C-level",
+      "hook": "Del caos híbrido a un modelo de alto rendimiento: marco en 3 decisiones para el futuro del trabajo remoto en tu organización",
+      "complexity": "avanzado",
+      "description": "Informe basado en datos y benchmarks por sector y tamaño de empresa que presenta 3–5 modelos operativos claros (con pros, contras y condiciones de éxito) para organizar trabajo remoto/híbrido, seguido de un webinar cerrado donde se aplican a casos reales de los asistentes."
+    },
+    {
+      "format": "serie de casos de estudio (PDF + video breakdown)",
+      "hook": "Cómo empresas de alto crecimiento rediseñaron su cultura para un mundo remoto sin perder velocidad ni pertenencia",
+      "complexity": "avanzado",
+      "description": "Colección de 4–6 casos profundos que muestran la situación inicial, decisiones clave, métricas antes/después y aprendizajes accionables sobre cultura en remoto, con análisis en video orientado a directivos que quieran replicar o adaptar estos movimientos."
+    },
+    {
+      "format": "framework descargable + workshop",
+      "hook": "Blueprint de cultura híbrida: agenda, rituales y reglas de juego que puedes implementar en 90 días",
+      "complexity": "avanzado",
+      "description": "Marco práctico que define principios, rituales de equipo, cadencia de reuniones, flujos de comunicación y acuerdos de disponibilidad para entornos híbridos, acompañado de un workshop donde se co-diseña la versión específica para la organización cliente."
+    },
+    {
+      "format": "newsletter/serie de insights para liderazgo",
+      "hook": "Señales tempranas del futuro del trabajo: qué están probando hoy las empresas que liderarán tu sector en 3 años",
+      "complexity": "básico",
+      "description": "Serie periódica corta, pensada para directivos ocupados, que sintetiza movimientos relevantes (políticas, herramientas, cambios culturales) de empresas de referencia y los traduce en decisiones concretas que un C-level puede considerar este trimestre."
+    },
+    {
+      "format": "diagnóstico interactivo online",
+      "hook": "Test de madurez en trabajo remoto y cultura: en 10 minutos descubres dónde estás perdiendo rendimiento y talento",
+      "complexity": "básico",
+      "description": "Cuestionario que segmenta a la empresa en niveles de madurez y entrega un informe breve con puntos críticos y posibles líneas de intervención, sirviendo como puerta de entrada a proyectos de consultoría high-ticket."
+    }
+  ],
+  "not_recommended_if": [
+    "Tu oferta principal no incluye servicios ni productos relacionados con talento, liderazgo, organización, transformación cultura

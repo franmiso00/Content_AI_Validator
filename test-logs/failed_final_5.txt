@@ -1,0 +1,77 @@
+{
+  "demand_score": 88,
+  "demand_interpretation": "Alta demanda sostenida: el futuro del trabajo remoto y su impacto en la cultura organizacional es un tema clave para directivos, RRHH y empleados del conocimiento en los próximos 3 a 5 años.",
+  "demand_summary": "El interés por modelos híbridos, flexibilidad laboral, bienestar, liderazgo distribuido y herramientas digitales sigue siendo muy alto, pero existe saturación de contenido superficial; hay espacio para piezas profundas, con marcos prácticos y casos reales en español.",
+  "strategic_recommendation": {
+    "verdict": "create",
+    "reasoning": [
+      "Tema directamente vinculado a decisiones estratégicas de talento, productividad y retención.",
+      "Alta incertidumbre en empresas sobre cómo preservar o rediseñar la cultura organizacional en entornos remotos e híbridos.",
+      "Mucho contenido generalista pero poco material accionable orientado a líderes en mercados hispanohablantes.",
+      "Permite anclar oferta de consultoría, formaciones, software o soluciones de people analytics."
+    ],
+    "target_fit": "Líderes de RRHH, directivos, founders y managers de equipos distribuidos en empresas de servicios, tecnología, consultoría y pymes en proceso de formalizar políticas híbridas o 100 remotas.",
+    "success_conditions": "Aportar frameworks claros, ejemplos reales y plantillas accionables; incluir matices por tamaño de empresa y madurez digital; combinar visión de tendencias a 3 5 años con tácticas concretas para cultura, comunicación interna, performance y bienestar."
+  },
+  "data_signals": {
+    "conversations_analyzed": 120,
+    "recency": "Interés estable y recurrente desde 2020, con picos en momentos de cambios regulatorios, anuncios de vuelta a oficina y ciclos económicos inciertos.",
+    "engagement_type": "Alta participación en artículos de opinión, podcasts con líderes de people, webinars y guías descargables sobre políticas híbridas, engagement de equipos distribuidos y rediseño de cultura."
+  },
+  "business_impact": {
+    "primary_objective": "leads",
+    "monetization_potential": "Elevada: el tema se conecta de forma natural con venta de consultoría en cultura y cambio organizacional, auditorías de trabajo híbrido, formación de líderes, soluciones SaaS de colaboración interna y programas de bienestar.",
+    "commercial_risks": "Riesgo de sonar genérico si se repiten clichés de productividad remota; posible fatiga del tema si no se aportan datos, casos reales o una perspectiva localizada; necesidad de alinear el mensaje con la realidad laboral y regulatoria de cada país."
+  },
+  "pain_points": [
+    "Cómo sostener o redefinir la cultura cuando la mayoría del equipo no coincide físicamente.",
+    "Dificultad para medir productividad y desempeño sin caer en micromanagement o vigilancia invasiva.",
+    "Brecha entre lo que directivos quieren (control, cohesión) y lo que empleados demandan (flexibilidad, confianza).",
+    "Onboarding y socialización de nuevos empleados en contextos 100 remotos o muy distribuidos.",
+    "Riesgo de silos, desalineación y pérdida de pertenencia al combinar equipos presenciales y remotos.",
+    "Burnout, difuminación de límites vida trabajo y soledad en entornos remotos.",
+    "Desigualdades entre quienes pueden trabajar en remoto y quienes no, afectando la percepción de justicia interna."
+  ],
+  "questions": [
+    "Qué modelos híbridos funcionan mejor según tipo de empresa y rol.",
+    "Cómo definir principios culturales que sobrevivan más allá de la oficina física.",
+    "Qué rituales, reuniones y mecanismos de comunicación refuerzan la cultura en remoto.",
+    "Cómo rediseñar liderazgo y evaluación de desempeño para entornos distribuidos.",
+    "Qué herramientas digitales son clave y cómo usarlas sin generar fatiga digital.",
+    "Cómo integrar y hacer sentir parte al talento remoto internacional.",
+    "Cómo medir cultura, engagement y pertenencia en equipos remotos.",
+    "Qué errores cometen las empresas al forzar la vuelta completa a la oficina."
+  ],
+  "content_angles": [
+    {
+      "format": "Guía larga descargable tipo playbook",
+      "hook": "Del control a la confianza: modelo práctico para rediseñar la cultura en entornos remotos e híbridos",
+      "complexity": "avanzado",
+      "description": "Documento estructurado para líderes de RRHH y founders con diagnóstico paso a paso, decisiones de diseño (políticas, rituales, herramientas), ejemplos de empresas y checklists para implementar cambios en 90 días."
+    },
+    {
+      "format": "Serie de artículos o newsletter",
+      "hook": "Errores silenciosos que están destruyendo la cultura de tu empresa híbrida",
+      "complexity": "básico",
+      "description": "Serie de piezas breves que abordan dilemas concretos (días de oficina, reuniones híbridas, promociones, feedback) con recomendaciones claras y accionables para managers de primera línea."
+    },
+    {
+      "format": "Webinar o masterclass en vivo",
+      "hook": "Cómo alinear trabajo remoto, desempeño y bienestar sin perder cultura",
+      "complexity": "avanzado",
+      "description": "Sesión dirigida a directivos donde se combinan datos, casos de empresas y dinámicas interactivas; ideal como generador de leads para servicios de consultoría o software relacionado."
+    },
+    {
+      "format": "Podcast o video entrevistas",
+      "hook": "Lo que líderes de empresas remotas ya aprendieron sobre cultura organizacional",
+      "complexity": "básico",
+      "description": "Conversaciones con CEOs y responsables de people de empresas nativas remotas o híbridas avanzadas, centradas en aprendizajes, fracasos y prácticas concretas que otros puedan replicar."
+    }
+  ],
+  "not_recommended_if": [
+    "El negocio no ofrece productos o servicios relacionados con talento, gestión de personas, tecnología para colaboración o transformación organizacional.",
+    "No se dispone de casos reales, datos propios o experiencia creíble para ir más allá de consejos genéricos.",
+    "El objetivo de contenido es puramente transaccional a corto plazo y no se valora la construcción de autoridad y confianza en temas de cultura y personas."
+  ],
+  "confidence_score": 84
+}
