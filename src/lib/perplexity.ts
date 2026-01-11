@@ -30,31 +30,58 @@ export interface PerplexityResponse {
     confidence_score: number;
 }
 
+// Helper to validate that all required fields exist in the AI response
+function isValidPerplexityResponse(obj: any): obj is PerplexityResponse {
+    if (!obj || typeof obj !== 'object') return false;
+
+    const requiredKeys: (keyof PerplexityResponse)[] = [
+        "demand_score",
+        "demand_interpretation",
+        "demand_summary",
+        "strategic_recommendation",
+        "data_signals",
+        "business_impact",
+        "pain_points",
+        "questions",
+        "content_angles",
+        "not_recommended_if",
+        "confidence_score"
+    ];
+
+    for (const key of requiredKeys) {
+        if (obj[key] === undefined || obj[key] === null) {
+            console.warn(`[perplexity] Missing required field: ${key}`);
+            return false;
+        }
+    }
+
+    // Deeper check for nested required objects
+    if (!obj.strategic_recommendation.verdict || !Array.isArray(obj.strategic_recommendation.reasoning)) return false;
+    if (!obj.data_signals.engagement_type) return false;
+    if (!obj.business_impact.primary_objective || !obj.business_impact.monetization_potential) return false;
+    if (!Array.isArray(obj.content_angles) || obj.content_angles.length === 0) return false;
+
+    return true;
+}
+
 export async function validateIdea(topic: string, audience?: string): Promise<PerplexityResponse> {
     const apiKey = process.env.PERPLEXITY_API_KEY;
     if (!apiKey) {
         throw new Error("PERPLEXITY_API_KEY is not set");
     }
 
-    const systemPrompt = `You are a strategic market research API. Your goal is to provide a validation for a content idea.
-    
-Output ONLY a valid JSON object. 
-IMPORTANT RULES:
-1. Do not use double quotes (") inside your string values. Use single quotes (') or nothing if you need emphasis.
-2. Do not use markdown, code blocks, or citations.
-3. Response must start with { and end with }.
+    const systemPrompt = `Eres un experto analista de investigación de mercado. 
+Valida la siguiente idea de contenido para un negocio high-ticket.
+RESPONDE SIEMPRE EN ESPAÑOL.
 
-Topic: "${topic}"
-${audience ? `Target Audience: "${audience}"` : ""}
-
-Required structure:
+Estructura JSON requerida (asegúrate de incluir TODOS los campos):
 {
-  "demand_score": <number>,
+  "demand_score": <number 0-100>,
   "demand_interpretation": "<string>",
   "demand_summary": "<string>",
   "strategic_recommendation": {
     "verdict": "create" | "pilot" | "reconsider",
-    "reasoning": ["<string>"],
+    "reasoning": ["<string>", "<string>", "<string>"],
     "target_fit": "<string>",
     "success_conditions": "<string>"
   },
@@ -68,8 +95,8 @@ Required structure:
     "monetization_potential": "<string>",
     "commercial_risks": "<string>"
   },
-  "pain_points": ["<string>"],
-  "questions": ["<string>"],
+  "pain_points": ["<string>", "<string>", "<string>", "<string>", "<string>"],
+  "questions": ["<string>", "<string>", "<string>"],
   "content_angles": [
     {
       "format": "<string>",
@@ -78,9 +105,18 @@ Required structure:
       "description": "<string>"
     }
   ],
-  "not_recommended_if": ["<string>"],
-  "confidence_score": <number>
-}`;
+  "not_recommended_if": ["<string>", "<string>"],
+  "confidence_score": <number 0-100>
+}
+
+REGLAS:
+- Sin comillas dobles dentro de los textos (usa comillas simples).
+- Sin markdown, sin bloques de código, sin citas.
+- Idioma: Español.
+
+Topic: "${topic}"
+${audience ? `Target Audience: "${audience}"` : ""}
+`;
 
     // Retry mechanism
     let lastError: any = null;
@@ -97,14 +133,15 @@ Required structure:
                     messages: [
                         {
                             role: "system",
-                            content: "Professional Market Research API. Output pure JSON only. No markdown, no citations."
+                            content: "Eres un API que solo responde en JSON puro. Sin descripciones, sin markdown, sin citas. Idioma: Español."
                         },
                         { role: "user", content: systemPrompt }
                     ],
                     temperature: 0.1,
-                    max_tokens: 4000, // Reduced to 4k for faster response and less chance of truncation
+                    max_tokens: 4000,
                 })
             });
+
 
             if (!response.ok) {
                 const errorText = await response.text();
@@ -114,6 +151,8 @@ Required structure:
             const data = await response.json();
             const content = data.choices[0]?.message?.content;
             if (!content) throw new Error("No content returned from Perplexity");
+
+            console.log(`[perplexity] Raw content (attempt ${attempt}):`, content.substring(0, 200) + "...");
 
             // --- STEP-BY-STEP SANITATION ---
             let rawContent = content.trim();
@@ -125,30 +164,31 @@ Required structure:
             // 2. Extract JSON part
             const start = rawContent.indexOf("{");
             const end = rawContent.lastIndexOf("}");
-            if (start === -1) throw new Error("No JSON found");
+            if (start === -1) throw new Error("No JSON found in response");
             let jsonString = rawContent.substring(start, (end !== -1 ? end + 1 : undefined));
 
-            // 3. Fix control characters inside values
-            jsonString = jsonString.replace(/[\u0000-\u001F\u007F-\u009F]/g, (m: string) => {
-                if (m === "\n") return "\\n";
-                if (m === "\r") return "\\r";
-                if (m === "\t") return "\\t";
-                return "";
-            });
+            // Protection against double braces or leading garbage that looks like a brace
+            jsonString = jsonString.trim();
+            while (jsonString.startsWith("{{") && jsonString.endsWith("}}")) {
+                jsonString = jsonString.substring(1, jsonString.length - 1).trim();
+            }
 
-            // 4. Attempt direct parse
+            // 3. Fix forbidden control characters (except whitespace: \n, \r, \t)
+            // JSON.parse allows \n, \r, \t as whitespace, but forbidden characters 0-31 must be handled.
+            // We'll remove non-printable characters except whitespace.
+            jsonString = jsonString.replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F-\u009F]/g, "");
+
+            // 4. Attempt parse and strict validation
+            let parsed;
             try {
-                const parsed = JSON.parse(jsonString);
-                if (!parsed.demand_score) throw new Error("Incomplete JSON structure");
-                return parsed;
-            } catch (firstParseError: any) {
-                console.warn("[perplexity] Primary parse failed. Attempting mild repair...", firstParseError.message);
+                parsed = JSON.parse(jsonString);
+            } catch (pErr: any) {
+                console.warn(`[perplexity] JSON parse failed. Error detail: ${pErr.message}`);
 
-                // Mild Repair: Fix common trailing commas and balanced braces
+                // Mild Repair if parse fails
                 let mildRepair = jsonString.trim();
                 mildRepair = mildRepair.replace(/,\s*([\}\]])/g, "$1");
 
-                // Add missing closures if truncated
                 let braces = 0;
                 let inQ = false;
                 for (let i = 0; i < mildRepair.length; i++) {
@@ -163,21 +203,26 @@ Required structure:
                 if (braces > 0) mildRepair += "}".repeat(braces);
 
                 try {
-                    const finalParsed = JSON.parse(mildRepair);
-                    if (!finalParsed.demand_score) throw new Error("Repaired JSON missing fields");
-                    return finalParsed;
-                } catch (secondErr: any) {
-                    console.error("[perplexity] Mild repair failed. Retrying call if possible.");
-                    throw firstParseError;
+                    parsed = JSON.parse(mildRepair);
+                } catch (rErr: any) {
+                    console.error(`[perplexity] Mild repair also failed. Final string snippet: ${mildRepair.substring(0, 50)}`);
+                    throw pErr; // Throw original error
                 }
             }
+
+            if (isValidPerplexityResponse(parsed)) {
+                console.log("[perplexity] Validation successful");
+                return parsed;
+            } else {
+                throw new Error("JSON structure is incomplete or invalid");
+            }
+
         } catch (error: any) {
             lastError = error;
             console.error(`[perplexity] Attempt ${attempt} failed:`, error.message);
             if (attempt === 2) throw error;
-            await new Promise(resolve => setTimeout(resolve, 500));
+            await new Promise(resolve => setTimeout(resolve, 800)); // Slightly longer wait
         }
     }
     throw lastError;
 }
-

@@ -123,7 +123,7 @@ export function ResultsDisplay({ result, topic, onReset }: ResultsDisplayProps) 
                                         Razonamiento del Veredicto
                                     </h4>
                                     <ul className="space-y-3">
-                                        {result.strategic_recommendation.reasoning.map((item, i) => (
+                                        {(result.strategic_recommendation?.reasoning || []).map((item, i) => (
                                             <li key={i} className="flex items-start gap-3 text-sm">
                                                 <div className={`mt-1 h-2 w-2 rounded-full shrink-0 ${verdict.badge}`} />
                                                 <span className="text-gray-700 leading-relaxed font-medium">{item}</span>
@@ -133,11 +133,11 @@ export function ResultsDisplay({ result, topic, onReset }: ResultsDisplayProps) 
                                     <div className="pt-4 grid grid-cols-2 gap-4 border-t border-gray-200/50">
                                         <div>
                                             <p className="text-[10px] font-bold uppercase text-gray-400 tracking-wider">Ideal para</p>
-                                            <p className="text-sm font-semibold text-gray-800">{result.strategic_recommendation.target_fit}</p>
+                                            <p className="text-sm font-semibold text-gray-800">{result.strategic_recommendation?.target_fit || 'Audiencia general'}</p>
                                         </div>
                                         <div>
                                             <p className="text-[10px] font-bold uppercase text-gray-400 tracking-wider">Condición de éxito</p>
-                                            <p className="text-sm font-semibold text-gray-800">{result.strategic_recommendation.success_conditions}</p>
+                                            <p className="text-sm font-semibold text-gray-800">{result.strategic_recommendation?.success_conditions || 'Ejecución consistente'}</p>
                                         </div>
                                     </div>
                                 </div>
@@ -176,17 +176,17 @@ export function ResultsDisplay({ result, topic, onReset }: ResultsDisplayProps) 
                             </CardHeader>
                             <CardContent className="pt-6 space-y-6">
                                 <div className="space-y-1">
-                                    <p className="text-3xl font-black">{result.data_signals.conversations_analyzed}</p>
+                                    <p className="text-3xl font-black">{result.data_signals?.conversations_analyzed || 0}</p>
                                     <p className="text-xs text-gray-400 font-bold uppercase">Conversaciones Analizadas</p>
                                 </div>
                                 <div className="grid grid-cols-2 gap-4">
                                     <div>
                                         <p className="text-xs font-bold text-gray-500 uppercase">Frescura</p>
-                                        <p className="text-sm font-medium">{result.data_signals.recency}</p>
+                                        <p className="text-sm font-medium">{result.data_signals?.recency || 'Reciente'}</p>
                                     </div>
                                     <div>
                                         <p className="text-xs font-bold text-gray-500 uppercase">Engagement</p>
-                                        <p className="text-sm font-medium">{result.data_signals.engagement_type}</p>
+                                        <p className="text-sm font-medium">{result.data_signals?.engagement_type || 'Mixto'}</p>
                                     </div>
                                 </div>
                             </CardContent>
@@ -205,17 +205,21 @@ export function ResultsDisplay({ result, topic, onReset }: ResultsDisplayProps) 
                                         <ArrowUpRight className="h-3 w-3" /> Impacto Comercial
                                     </div>
                                     <p className="text-xs uppercase font-bold text-blue-300 tracking-wider">Objetivo Recomendado</p>
-                                    <p className="text-2xl font-black capitalize">{result.business_impact.primary_objective === 'leads' ? 'Captación (Leads)' : result.business_impact.primary_objective === 'authority' ? 'Autoridad de Marca' : 'Ventas Directas'}</p>
+                                    <p className="text-2xl font-black capitalize">
+                                        {result.business_impact?.primary_objective === 'leads' ? 'Captación (Leads)' :
+                                            result.business_impact?.primary_objective === 'authority' ? 'Autoridad de Marca' :
+                                                result.business_impact?.primary_objective === 'sales' ? 'Ventas Directas' : 'Crecimiento'}
+                                    </p>
                                 </div>
                                 <div>
                                     <p className="text-xs uppercase font-bold text-blue-300 tracking-wider">Potencial de Monetización</p>
-                                    <p className="text-sm text-gray-200 leading-relaxed mt-1 font-medium">{result.business_impact.monetization_potential}</p>
+                                    <p className="text-sm text-gray-200 leading-relaxed mt-1 font-medium">{result.business_impact?.monetization_potential || 'Alta'}</p>
                                 </div>
                                 <div className="bg-white/5 p-4 rounded-2xl border border-white/10">
                                     <p className="text-xs uppercase font-bold text-rose-400 tracking-wider flex items-center gap-2">
                                         <AlertTriangle className="h-3 w-3" /> Riesgos Comerciales
                                     </p>
-                                    <p className="text-sm text-gray-300 leading-relaxed mt-2">{result.business_impact.commercial_risks}</p>
+                                    <p className="text-sm text-gray-300 leading-relaxed mt-2">{result.business_impact?.commercial_risks || 'Bajo riesgo'}</p>
                                 </div>
                             </div>
                         </CardContent>
@@ -231,7 +235,7 @@ export function ResultsDisplay({ result, topic, onReset }: ResultsDisplayProps) 
                                     Frustraciones Detectadas
                                 </h4>
                                 <div className="grid gap-3">
-                                    {result.pain_points.map((point, i) => (
+                                    {(result.pain_points || []).map((point, i) => (
                                         <div key={i} className="p-4 bg-white border border-gray-200 rounded-2xl text-sm font-medium text-gray-700 shadow-sm flex gap-3">
                                             <span className="font-bold text-rose-300">0{i + 1}</span>
                                             {point}
@@ -246,7 +250,7 @@ export function ResultsDisplay({ result, topic, onReset }: ResultsDisplayProps) 
                                     Preguntas de la Audiencia
                                 </h4>
                                 <div className="grid gap-3 text-sm italic text-gray-600 bg-amber-50/50 p-6 rounded-3xl border border-amber-100">
-                                    {result.questions.map((q, i) => (
+                                    {(result.questions || []).map((q, i) => (
                                         <div key={i} className="flex gap-2">
                                             <span className="text-amber-400">"</span>
                                             <span>{q}</span>
@@ -262,7 +266,7 @@ export function ResultsDisplay({ result, topic, onReset }: ResultsDisplayProps) 
                                     <Ban className="h-4 w-4" /> No recomendado si:
                                 </h4>
                                 <ul className="space-y-2">
-                                    {result.not_recommended_if.map((item, i) => (
+                                    {(result.not_recommended_if || []).map((item, i) => (
                                         <li key={i} className="flex items-center gap-2 text-xs font-semibold text-rose-800/70">
                                             <div className="h-1 w-1 rounded-full bg-rose-300" />
                                             {item}
@@ -271,6 +275,7 @@ export function ResultsDisplay({ result, topic, onReset }: ResultsDisplayProps) 
                                 </ul>
                             </div>
                         </div>
+
 
                         {/* Actionable Angles */}
                         <div className="space-y-4">
