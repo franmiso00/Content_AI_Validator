@@ -7,12 +7,23 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card";
 import { createClient } from "@/lib/supabase/client";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { toast } from "sonner";
+import { Suspense } from "react";
 import Link from "next/link";
 
 export default function LoginPage() {
+    return (
+        <Suspense fallback={<div>Loading...</div>}>
+            <LoginForm />
+        </Suspense>
+    );
+}
+
+function LoginForm() {
     const router = useRouter();
+    const searchParams = useSearchParams();
+    const next = searchParams.get("next") || "/dashboard";
     const [isPending, startTransition] = useTransition();
 
     async function handleLogin(formData: FormData) {
@@ -30,7 +41,7 @@ export default function LoginPage() {
                 toast.error(error.message);
             } else {
                 toast.success("Welcome back!");
-                router.push("/dashboard"); // Redirect to dashboard
+                router.push(next);
                 router.refresh();
             }
         });

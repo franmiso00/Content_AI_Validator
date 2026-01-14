@@ -3,6 +3,7 @@
 
 import { Badge } from "@/components/ui/badge";
 import { Sparkles, AlertTriangle } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 interface ValidationCounterProps {
     remaining: number;
@@ -17,6 +18,7 @@ export function ValidationCounter({
     isEarlyAdopter,
     onUpgradeClick,
 }: ValidationCounterProps) {
+    const t = useTranslations("earlyAdopter.counter");
     const percentage = (remaining / total) * 100;
 
     return (
@@ -56,15 +58,15 @@ export function ValidationCounter({
                     <span className={`text-sm font-medium ${remaining === 0 ? "text-red-600" : remaining <= 1 ? "text-amber-600" : "text-gray-600"
                         }`}>
                         {remaining === 0 ? (
-                            "Sin validaciones"
+                            t("noValidations")
                         ) : (
                             <>
-                                {remaining} de {total}
+                                {remaining} {t("of")} {total}
                             </>
                         )}
                     </span>
                     <span className="text-xs text-gray-400">
-                        {isEarlyAdopter ? "Early Adopter" : "Plan gratuito"}
+                        {isEarlyAdopter ? t("earlyAdopter") : t("freePlan")}
                     </span>
                 </div>
             </div>
@@ -76,7 +78,7 @@ export function ValidationCounter({
                     className="bg-gradient-to-r from-amber-100 to-amber-200 text-amber-800 border-amber-300 px-3 py-1"
                 >
                     <Sparkles className="w-3 h-3 mr-1" />
-                    Early Adopter
+                    {t("earlyAdopter")}
                 </Badge>
             ) : remaining <= 1 && onUpgradeClick ? (
                 <button
@@ -84,7 +86,7 @@ export function ValidationCounter({
                     className="flex items-center gap-1 px-3 py-1.5 text-sm font-medium text-blue-600 bg-blue-50 hover:bg-blue-100 rounded-full transition-colors"
                 >
                     <AlertTriangle className="w-3 h-3" />
-                    Obtener más
+                    {t("upgrade")}
                 </button>
             ) : null}
         </div>

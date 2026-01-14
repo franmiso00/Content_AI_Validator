@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { DM_Sans } from "next/font/google";
 import "./globals.css";
 import { ToasterProvider } from "@/components/providers/toaster-provider";
+import { NextIntlClientProvider } from "next-intl";
+import { getLocale, getMessages } from "next-intl/server";
 
 const dmSans = DM_Sans({
   subsets: ["latin"],
@@ -18,18 +20,23 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const locale = await getLocale();
+  const messages = await getMessages();
+
   return (
-    <html lang="es" suppressHydrationWarning>
+    <html lang={locale} suppressHydrationWarning>
       <body
         className={`${dmSans.variable} font-sans antialiased`}
       >
-        {children}
-        <ToasterProvider />
+        <NextIntlClientProvider messages={messages}>
+          {children}
+          <ToasterProvider />
+        </NextIntlClientProvider>
       </body>
     </html>
   );

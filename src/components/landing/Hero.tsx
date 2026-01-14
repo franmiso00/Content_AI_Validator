@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -36,40 +37,35 @@ interface HeroProps {
     initialTopic?: string;
 }
 
-const TOPIC_EXAMPLES = [
-    "Uso de IA en despachos de abogados",
-    "Newsletters para dentistas con práctica",
-    "Automatización para agencias de marketing",
-    "Escalar un SaaS de 0 a 10k MRR"
-];
 
-const AUDIENCE_EXAMPLES = [
-    "Abogados", "Agencias", "Coaches", "SaaS founders", "Salud"
-];
 
 const CONTENT_TYPES = [
-    { id: "article", label: "Artículo", icon: FileText },
-    { id: "newsletter", label: "Newsletter", icon: Mail },
-    { id: "video-long", label: "Video Largo", icon: Video },
-    { id: "video-short", label: "Shorts/Reels", icon: Smartphone },
-    { id: "social", label: "Social Media", icon: MessageSquare },
-    { id: "guide", label: "Guía/Ebook", icon: BookOpen },
+    { id: "article", labelKey: "types.article", icon: FileText },
+    { id: "newsletter", labelKey: "types.newsletter", icon: Mail },
+    { id: "video-long", labelKey: "types.video-long", icon: Video },
+    { id: "video-short", labelKey: "types.video-short", icon: Smartphone },
+    { id: "social", labelKey: "types.social", icon: MessageSquare },
+    { id: "guide", labelKey: "types.guide", icon: BookOpen },
 ];
 
 const OBJECTIVES = [
-    { id: "leads", label: "🎯 Leads", color: "bg-sky-50 text-sky-700 border-sky-200" },
-    { id: "sales", label: "💼 Vender", color: "bg-emerald-50 text-emerald-700 border-emerald-200" },
-    { id: "authority", label: "🧠 Autoridad", color: "bg-slate-100 text-slate-700 border-slate-200" },
-    { id: "awareness", label: "📣 Alcance", color: "bg-amber-50 text-amber-700 border-amber-200" },
+    { id: "leads", labelKey: "objectives.leads", color: "bg-sky-50 text-sky-700 border-sky-200" },
+    { id: "sales", labelKey: "objectives.sales", color: "bg-emerald-50 text-emerald-700 border-emerald-200" },
+    { id: "authority", labelKey: "objectives.authority", color: "bg-slate-100 text-slate-700 border-slate-200" },
+    { id: "awareness", labelKey: "objectives.awareness", color: "bg-amber-50 text-amber-700 border-amber-200" },
 ];
 
 const AUDIENCE_LEVELS = [
-    { id: "beginner", label: "Principiante" },
-    { id: "intermediate", label: "Intermedio" },
-    { id: "advanced", label: "Avanzado" },
+    { id: "beginner", labelKey: "levels.beginner" },
+    { id: "intermediate", labelKey: "levels.intermediate" },
+    { id: "advanced", labelKey: "levels.advanced" },
 ];
 
 export function Hero({ onValidate, isValidating, initialTopic = "" }: HeroProps) {
+    const t = useTranslations("landing.hero");
+    const tCommon = useTranslations("common");
+    const TOPIC_EXAMPLES = t.raw("examples.topics") as string[];
+    const AUDIENCE_EXAMPLES = t.raw("examples.audiences") as string[];
     const [topic, setTopic] = useState(initialTopic);
 
     useEffect(() => {
@@ -84,18 +80,12 @@ export function Hero({ onValidate, isValidating, initialTopic = "" }: HeroProps)
     const [audienceLevel, setAudienceLevel] = useState("intermediate");
     const [showAdvanced, setShowAdvanced] = useState(false);
 
-    const [loadingMessage, setLoadingMessage] = useState("Analizando...");
+    const [loadingMessage, setLoadingMessage] = useState(t("form.validating"));
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         if (topic.trim()) {
-            const messages = [
-                "Escaneando Reddit...",
-                "Identificando dolores...",
-                "Analizando demanda...",
-                "Generando insights...",
-                "Casi listo..."
-            ];
+            const messages = t.raw("form.loadingMessages") as string[];
             let i = 0;
             const interval = setInterval(() => {
                 setLoadingMessage(messages[i % messages.length]);
@@ -125,16 +115,16 @@ export function Hero({ onValidate, isValidating, initialTopic = "" }: HeroProps)
                     <div className="space-y-6">
                         <div className="inline-flex items-center gap-2 bg-sky-100 px-4 py-2 rounded-full text-sky-700 text-xs font-bold uppercase tracking-wider mb-2">
                             <CheckCircle2 className="h-4 w-4" />
-                            Validación basada en señales, no en intuición
+                            {t("badge")}
                         </div>
 
                         <h1 className="text-4xl md:text-6xl font-bold text-slate-900 leading-[1.1] tracking-tight">
-                            Deja de crear contenido<br />
-                            <span className="bg-gradient-to-r from-sky-500 to-cyan-500 bg-clip-text text-transparent">que nadie busca</span>
+                            {t("title")}<br />
+                            <span className="bg-gradient-to-r from-sky-500 to-cyan-500 bg-clip-text text-transparent">{t("titleGradient")}</span>
                         </h1>
 
                         <p className="text-lg md:text-xl text-slate-500 max-w-2xl mx-auto leading-relaxed">
-                            Analizamos señales de demanda real en comunidades activas para que valides tu idea antes de invertir tiempo en crearla.
+                            {t("subtitle")}
                         </p>
                     </div>
 
@@ -145,11 +135,11 @@ export function Hero({ onValidate, isValidating, initialTopic = "" }: HeroProps)
                                 <div className="space-y-4">
                                     <label className="text-xs font-bold text-slate-400 uppercase tracking-widest flex items-center gap-2">
                                         <Zap className="h-4 w-4 text-sky-500" />
-                                        1. ¿Cuál es tu idea o tema principal?
+                                        {t("form.step1")}
                                     </label>
                                     <Input
                                         className="text-lg px-4 py-6 border-2 border-slate-100 focus:border-sky-500 focus:ring-4 focus:ring-sky-500/10 rounded-xl bg-slate-50 transition-all duration-200"
-                                        placeholder="Ej: Cómo crear newsletters para abogados que usan IA"
+                                        placeholder={t("form.topicPlaceholder")}
                                         value={topic}
                                         onChange={(e) => setTopic(e.target.value)}
                                         disabled={isValidating}
@@ -173,7 +163,7 @@ export function Hero({ onValidate, isValidating, initialTopic = "" }: HeroProps)
                                 <div className="space-y-4">
                                     <label className="text-xs font-bold text-slate-400 uppercase tracking-widest flex items-center gap-2">
                                         <FileText className="h-4 w-4 text-sky-500" />
-                                        2. Tipo de contenido
+                                        {t("form.step2")}
                                     </label>
                                     <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
                                         {CONTENT_TYPES.map((type) => {
@@ -190,7 +180,7 @@ export function Hero({ onValidate, isValidating, initialTopic = "" }: HeroProps)
                                                         }`}
                                                 >
                                                     <Icon className={`h-4 w-4 ${isActive ? "text-sky-500" : "text-slate-400"}`} />
-                                                    {type.label}
+                                                    {t(type.labelKey)}
                                                 </button>
                                             );
                                         })}
@@ -201,11 +191,11 @@ export function Hero({ onValidate, isValidating, initialTopic = "" }: HeroProps)
                                 <div className="space-y-4">
                                     <label className="text-xs font-bold text-slate-400 uppercase tracking-widest flex items-center gap-2">
                                         <Users className="h-4 w-4 text-sky-500" />
-                                        3. ¿Para quién es este contenido?
+                                        {t("form.step3")}
                                     </label>
                                     <Input
                                         className="text-base px-4 py-5 border-2 border-slate-100 focus:border-sky-500 focus:ring-4 focus:ring-sky-500/10 rounded-xl bg-slate-50 transition-all duration-200"
-                                        placeholder="Ej: Dentistas con clínica propia preocupados por la eficiencia"
+                                        placeholder={t("form.audiencePlaceholder")}
                                         value={audience}
                                         onChange={(e) => setAudience(e.target.value)}
                                         disabled={isValidating}
@@ -219,7 +209,7 @@ export function Hero({ onValidate, isValidating, initialTopic = "" }: HeroProps)
                                     className="flex items-center gap-2 text-xs font-bold text-sky-600 hover:text-sky-700 transition-colors uppercase tracking-widest"
                                 >
                                     {showAdvanced ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
-                                    {showAdvanced ? "Ocultar avanzados" : "Opciones avanzadas"}
+                                    {showAdvanced ? t("form.hideAdvanced") : t("form.advancedOptions")}
                                 </button>
 
                                 {showAdvanced && (
@@ -227,7 +217,7 @@ export function Hero({ onValidate, isValidating, initialTopic = "" }: HeroProps)
                                         <div className="grid md:grid-cols-2 gap-6">
                                             <div className="space-y-3">
                                                 <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest flex items-center gap-2">
-                                                    Objetivo
+                                                    {t("form.objective")}
                                                 </label>
                                                 <div className="grid grid-cols-2 gap-2">
                                                     {OBJECTIVES.map((obj) => (
@@ -240,14 +230,14 @@ export function Hero({ onValidate, isValidating, initialTopic = "" }: HeroProps)
                                                                 : "border-slate-100 bg-white text-slate-500 hover:border-slate-200"
                                                                 }`}
                                                         >
-                                                            {obj.label}
+                                                            {t(obj.labelKey)}
                                                         </button>
                                                     ))}
                                                 </div>
                                             </div>
                                             <div className="space-y-3">
                                                 <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest flex items-center gap-2">
-                                                    Nivel Audiencia
+                                                    {t("form.audienceLevel")}
                                                 </label>
                                                 <div className="flex gap-2">
                                                     {AUDIENCE_LEVELS.map((level) => (
@@ -260,7 +250,7 @@ export function Hero({ onValidate, isValidating, initialTopic = "" }: HeroProps)
                                                                 : "border-slate-100 bg-white text-slate-500 hover:border-slate-200"
                                                                 }`}
                                                         >
-                                                            {level.label}
+                                                            {t(level.labelKey)}
                                                         </button>
                                                     ))}
                                                 </div>
@@ -282,7 +272,7 @@ export function Hero({ onValidate, isValidating, initialTopic = "" }: HeroProps)
                                         </>
                                     ) : (
                                         <>
-                                            Validar Idea
+                                            {t("form.validateButton")}
                                             <ArrowRight className="ml-2 h-5 w-5" />
                                         </>
                                     )}
@@ -291,15 +281,15 @@ export function Hero({ onValidate, isValidating, initialTopic = "" }: HeroProps)
                                 <div className="flex items-center justify-center gap-8 pt-2">
                                     <div className="flex items-center gap-2 text-[10px] font-bold text-slate-400 uppercase tracking-wide">
                                         <Zap className="h-3 w-3 text-sky-500" />
-                                        3 Pruebas Gratis
+                                        {tCommon("freeTrials")}
                                     </div>
                                     <div className="flex items-center gap-2 text-[10px] font-bold text-slate-400 uppercase tracking-wide">
                                         <Target className="h-3 w-3 text-sky-500" />
-                                        Datos Reales
+                                        {tCommon("realData")}
                                     </div>
                                     <div className="flex items-center gap-2 text-[10px] font-bold text-slate-400 uppercase tracking-wide">
                                         <Sparkles className="h-3 w-3 text-sky-500" />
-                                        Sin Registro
+                                        {tCommon("noRegistration")}
                                     </div>
                                 </div>
                             </form>

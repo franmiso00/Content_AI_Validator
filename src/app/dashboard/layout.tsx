@@ -3,6 +3,8 @@ import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { LanguageSelector } from "@/components/ui/LanguageSelector";
+import { getTranslations } from "next-intl/server";
 
 export default async function DashboardLayout({
     children,
@@ -11,6 +13,7 @@ export default async function DashboardLayout({
 }) {
     const supabase = await createClient();
     const { data: { user } } = await supabase.auth.getUser();
+    const t = await getTranslations();
 
     if (!user) {
         redirect("/auth/login");
@@ -22,14 +25,14 @@ export default async function DashboardLayout({
                 <div className="container flex h-14 items-center">
                     <div className="mr-4 hidden md:flex">
                         <Link href="/dashboard" className="mr-6 flex items-center space-x-2">
-                            <span className="hidden font-bold sm:inline-block">ContentValidator</span>
+                            <span className="hidden font-bold sm:inline-block">{t('common.appName')}</span>
                         </Link>
                         <nav className="flex items-center space-x-6 text-sm font-medium">
                             <Link href="/dashboard" className="transition-colors hover:text-foreground/80 text-foreground">
-                                Validation
+                                {t('dashboard.nav.validation')}
                             </Link>
                             <Link href="/dashboard/history" className="transition-colors hover:text-foreground/80 text-foreground/60">
-                                History
+                                {t('dashboard.nav.history')}
                             </Link>
                         </nav>
                     </div>
@@ -37,10 +40,11 @@ export default async function DashboardLayout({
                         <div className="w-full flex-1 md:w-auto md:flex-none">
                             {/* Add search or other nav items here */}
                         </div>
-                        <nav className="flex items-center">
-                            <span className="text-sm text-gray-500 mr-4">{user.email}</span>
+                        <nav className="flex items-center gap-2">
+                            <LanguageSelector />
+                            <span className="text-sm text-gray-500">{user.email}</span>
                             <form action="/auth/signout" method="post">
-                                <Button variant="ghost" size="sm">Sign Out</Button>
+                                <Button variant="ghost" size="sm">{t('common.signOut')}</Button>
                             </form>
                         </nav>
                     </div>

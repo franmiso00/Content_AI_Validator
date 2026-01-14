@@ -11,10 +11,14 @@ import { toast } from "sonner";
 import ValioLogo from "@/components/ui/ValioLogo";
 import { FAQSection } from "@/components/landing/FAQSection";
 import { CTASection } from "@/components/landing/CTASection";
+import { useTranslations } from "next-intl";
 
 import { ValidationInput, ValidationResult } from "@/lib/perplexity";
 
 export default function LandingPage() {
+  const tLanding = useTranslations("landing");
+  const tCommon = useTranslations("common");
+
   const [isValidating, setIsValidating] = useState(false);
   const [result, setResult] = useState<ValidationResult | null>(null);
   const [validatedTopic, setValidatedTopic] = useState("");
@@ -61,10 +65,10 @@ export default function LandingPage() {
           // Rate limited - show modal
           setModalReason("limit_reached");
           setShowEarlyAdopterModal(true);
-          toast.error("Has alcanzado el límite gratuito.");
+          toast.error(tCommon("toasts.limitReached"));
           return;
         }
-        throw new Error(error.error || "Error al validar la idea");
+        throw new Error(error.error || tCommon("toasts.serverError"));
       }
 
       const data: ValidationResult = await response.json();
@@ -76,9 +80,9 @@ export default function LandingPage() {
 
       // Show warning if low on validations
       if (remaining - 1 === 1) {
-        toast.warning("Te queda 1 validación gratuita", {
+        toast.warning(tCommon("toasts.oneLeft"), {
           action: {
-            label: "Obtener más",
+            label: tCommon("toasts.getMore"),
             onClick: () => {
               setModalReason("limit_reached");
               setShowEarlyAdopterModal(true);
@@ -86,9 +90,9 @@ export default function LandingPage() {
           },
         });
       } else if (remaining - 1 === 0) {
-        toast.info("Has usado todas tus validaciones gratuitas", {
+        toast.info(tCommon("toasts.allUsed"), {
           action: {
-            label: "Unirme a Early Access",
+            label: tCommon("toasts.joinEarlyAccess"),
             onClick: () => {
               setModalReason("limit_reached");
               setShowEarlyAdopterModal(true);
@@ -112,7 +116,7 @@ export default function LandingPage() {
 
     } catch (error: any) {
       console.error("Validation error:", error);
-      toast.error(error.message || "Error al conectar con el servidor");
+      toast.error(error.message || tCommon("toasts.serverError"));
     } finally {
       setIsValidating(false);
     }
@@ -120,7 +124,7 @@ export default function LandingPage() {
 
   const handleEarlyAdopterSuccess = () => {
     grantEarlyAdopterBonus();
-    toast.success("¡+5 validaciones desbloqueadas!");
+    toast.success(tCommon("toasts.bonusUnlocked"));
   };
 
   const handleReformulate = (newTopic: string) => {
@@ -200,7 +204,7 @@ export default function LandingPage() {
               <div className="space-y-4 text-center md:text-left">
                 <ValioLogo size={32} variant="white" />
                 <p className="text-slate-400 max-w-sm">
-                  Valida antes de crear. Decisiones basadas en señales, no en intuición.
+                  {tLanding("footer.description")}
                 </p>
               </div>
 
@@ -212,10 +216,10 @@ export default function LandingPage() {
                   }}
                   className="px-6 py-2 bg-white/10 hover:bg-white/20 text-white rounded-xl transition-all duration-200 border border-white/10"
                 >
-                  Unirme al Early Access
+                  {tLanding("footer.joinWaitlist")}
                 </button>
                 <p className="text-slate-500 text-sm">
-                  © 2026 valio.pro. Todos los derechos reservados.
+                  {tLanding("footer.copyright")}
                 </p>
               </div>
             </div>

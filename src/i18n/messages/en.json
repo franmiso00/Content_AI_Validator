@@ -1,0 +1,340 @@
+{
+    "common": {
+        "title": "Valio.pro | Intelligent Content Validator",
+        "description": "Validate your content ideas with real demand signals.",
+        "loading": "Loading...",
+        "error": "An error occurred",
+        "retry": "Retry",
+        "back": "Back",
+        "save": "Save",
+        "cancel": "Cancel",
+        "confirm": "Confirm",
+        "success": "Success!",
+        "noRegistration": "No Registration",
+        "realData": "Real Data",
+        "freeTrials": "3 Free Trials",
+        "objectives": {
+            "leads": "Lead Generation",
+            "authority": "Brand Authority",
+            "sales": "Direct Sales",
+            "awareness": "Growth/Reach"
+        },
+        "toasts": {
+            "limitReached": "You've reached the free limit.",
+            "oneLeft": "You have 1 free validation left",
+            "allUsed": "You've used all your free validations",
+            "serverError": "Error connecting to the server",
+            "bonusUnlocked": "+5 validations unlocked!",
+            "getMore": "Get more",
+            "joinEarlyAccess": "Join Early Access"
+        }
+    },
+    "landing": {
+        "header": {
+            "howItWorks": "How it works",
+            "dashboard": "Dashboard",
+            "joinWaitlist": "Join Early Access"
+        },
+        "hero": {
+            "badge": "Signal-based validation, not intuition",
+            "title": "Stop creating content",
+            "titleGradient": "nobody searches for",
+            "subtitle": "We analyze real demand signals in active communities so you can validate your idea before investing time in creating it.",
+            "form": {
+                "step1": "1. What is your main idea or topic?",
+                "topicPlaceholder": "Ex: How to create newsletters for lawyers using AI",
+                "step2": "2. Content type",
+                "step3": "3. Who is this content for?",
+                "audiencePlaceholder": "Ex: Dentists with own clinic concerned about efficiency",
+                "advancedOptions": "Advanced options",
+                "hideAdvanced": "Hide advanced",
+                "objective": "Objective",
+                "audienceLevel": "Audience Level",
+                "validateButton": "Validate Idea",
+                "validating": "Analyzing...",
+                "loadingMessages": [
+                    "Scanning Reddit...",
+                    "Identifying pain points...",
+                    "Analyzing demand...",
+                    "Generating insights...",
+                    "Almost ready..."
+                ]
+            },
+            "types": {
+                "article": "Article",
+                "newsletter": "Newsletter",
+                "video-long": "Long Video",
+                "video-short": "Shorts/Reels",
+                "social": "Social Media",
+                "guide": "Guide/Ebook"
+            },
+            "objectives": {
+                "leads": "🎯 Leads",
+                "sales": "💼 Sales",
+                "authority": "🧠 Authority",
+                "awareness": "📣 Reach"
+            },
+            "levels": {
+                "beginner": "Beginner",
+                "intermediate": "Intermediate",
+                "advanced": "Advanced"
+            },
+            "examples": {
+                "topics": [
+                    "Using AI in law firms",
+                    "Newsletters for practicing dentists",
+                    "Automation for marketing agencies",
+                    "Scaling a SaaS from 0 to 10k MRR"
+                ],
+                "audiences": [
+                    "Lawyers",
+                    "Agencies",
+                    "Coaches",
+                    "SaaS founders",
+                    "Health"
+                ]
+            }
+        },
+        "faq": {
+            "badge": "FAQ",
+            "title": "Clear your doubts",
+            "subtitle": "Everything you need to know before you start validating ideas with real data.",
+            "stillHaveDoubts": "Still have questions?",
+            "writeUs": "Write to us",
+            "items": {
+                "sources": {
+                    "q": "Where does the tool get its data from?",
+                    "a1": "Valio.pro analyzes real conversations in online communities where your audience is already talking. We use the Perplexity API to track and synthesize discussions on Reddit, specialized forums, and other public communities.",
+                    "a2": "We don't invent data or use predictions based on opaque algorithms. Everything we show you comes from real conversations: questions people ask, problems they express, and topics that generate genuine engagement.",
+                    "keyData": "Key fact: We don't generate content, we validate real demand."
+                },
+                "demandScore": {
+                    "q": "What is the Demand Score and how is it calculated?",
+                    "a1": "The Demand Score is our primary metric indicating the level of real interest in a topic in online communities. It's not a prediction of \"virality\", but a signal of existing demand.",
+                    "calcTitle": "It is calculated by combining:",
+                    "vol": "Conversation volume",
+                    "recency": "Recency (last 30-90 days)",
+                    "engagement": "Engagement type",
+                    "specificity": "Niche specificity",
+                    "interpretation": "The score is accompanied by a clear interpretation and a strategic recommendation: create, pilot, or reconsider.",
+                    "important": "Important: A high score doesn't guarantee success, it indicates real demand. A low score can mean an emerging niche or a saturated topic."
+                },
+                "time": {
+                    "q": "How long does it take to give me results?",
+                    "a1": "Between 10 and 30 seconds, depending on the complexity of the topic and the number of conversations found.",
+                    "a2": "The analysis is in real-time: every time you validate an idea, we look for current conversations in relevant communities. We don't use pre-loaded databases or cached results.",
+                    "manual": "Manual",
+                    "manualTime": "2-4 Hours",
+                    "valio": "Valio",
+                    "valioTime": "15-30 Seconds"
+                },
+                "updated": {
+                    "q": "Is the data current or historical?",
+                    "a1": "Current. Each validation analyzes recent conversations (mainly from the last 90 days) to give you a real picture of the current market.",
+                    "realTime": "In real-time",
+                    "window": "Last 90 days",
+                    "trend": "Growing/Failing",
+                    "whyItMatters": "Why it matters: A topic that was trending 2 years ago might be saturated today. We validate the now, not the past."
+                },
+                "diff": {
+                    "q": "How is it different from BuzzSumo or SparkToro?",
+                    "tool": "Tool",
+                    "limitation": "Limitation",
+                    "valio": "Valio",
+                    "buzzsumo": "Content already published",
+                    "sparktoro": "Audience analysis",
+                    "reddit": "2-4 h manual reading",
+                    "preCreation": "Pre-creation validation",
+                    "topicValidation": "Topic validation",
+                    "synthesis": "Synthesis in seconds",
+                    "diffKey": "Our key difference: We don't analyze existing content. We validate if it's worth creating something new."
+                },
+                "decisions": {
+                    "q": "How does it help me make decisions?",
+                    "a1": "Valio.pro is not a metrics dashboard. It is a decision system that reduces your uncertainty.",
+                    "verdict": "Clear verdict",
+                    "verdictDesc": "Create / Pilot / Reconsider",
+                    "reasoning": "Reasoning",
+                    "reasoningDesc": "Why yes or why no (2-3 points)",
+                    "profile": "Ideal profile",
+                    "profileDesc": "Who it works best for",
+                    "strategy": "Strategy",
+                    "strategyDesc": "Success conditions and risks",
+                    "philosophy": "Philosophy: A premium SaaS doesn't show data—it reduces uncertainty. You'll know what to do, not just what the numbers say."
+                },
+                "niche": {
+                    "q": "Does it work for my specific niche?",
+                    "a1": "Yes, as long as your audience has an online community presence (Reddit, forums, Quora, etc.).",
+                    "limitation": "Honest limitation: If your niche is ultra-local or your audience doesn't participate in online communities, results will be limited. In those cases, we indicate it clearly."
+                },
+                "formats": {
+                    "q": "What types of content is it for?",
+                    "a1": "For any format where you need to validate if the TOPIC has demand before producing it:",
+                    "noGen": "We don't do: We don't generate content for you. We validate that it's worth creating."
+                }
+            }
+        },
+        "cta": {
+            "noise": "Less noise.",
+            "impact": "More impact.",
+            "subtitle": "Stop guessing. Start deciding with data.",
+            "withValio": "With Valio.pro:",
+            "benefits": [
+                "Produce content with intent",
+                "Reduce content that doesn't convert",
+                "Make decisions with evidence",
+                "Increase your content's ROI"
+            ],
+            "button": "Validate your next idea now",
+            "free": "Free to start • No credit card required",
+            "quote": "\"A system to reduce the risk of creating content that doesn't convert\""
+        },
+        "footer": {
+            "description": "Validate before you create. Decisions based on signals, not intuition.",
+            "joinWaitlist": "Join Early Access",
+            "copyright": "© 2026 valio.pro. All rights reserved."
+        }
+    },
+    "validation": {
+        "results": {
+            "verdictBadge": "Strategic Verdict",
+            "reasoningTitle": "Verdict Reasoning",
+            "demandAnalysis": "Demand Signal Analysis",
+            "realEvidence": "Real Evidence",
+            "conversationsAnalyzed": "Conversations Analyzed",
+            "primarySource": "Primary Source",
+            "freshness": "Freshness",
+            "recent": "Recent",
+            "sourcesTitle": "Analyzed Sources",
+            "sourcesSummary": "{count} on {platform}",
+            "and": "and",
+            "collapse": "Collapse",
+            "viewDetails": "View details and links",
+            "detectedTopics": "Detected topics",
+            "realRefs": "Real Sources",
+            "ref": "Reference #{n}",
+            "businessImpact": "Commercial Impact",
+            "monetizationPotential": "Monetization Potential",
+            "commercialRisks": "Commercial Risks",
+            "recommendedObjective": "Recommended Objective",
+            "lowRisk": "Low commercial risk detected.",
+            "userChoices": "Assessment of Your Choices",
+            "format": "Format",
+            "objective": "Objective",
+            "level": "Level",
+            "optimal": "Optimal",
+            "improvable": "Improvable",
+            "aligned": "Aligned",
+            "appropriate": "Appropriate",
+            "suggested": "Suggested",
+            "recommended": "Recommended",
+            "yourChoice": "Your choice",
+            "competitiveLandscape": "Competitive Landscape",
+            "saturation": "Content Saturation",
+            "low": "Low",
+            "medium": "Medium",
+            "high": "High",
+            "dominantFormats": "Dominant Formats",
+            "gapOpportunities": "Gap Opportunities",
+            "painPoints": "Detected Frustrations",
+            "frequent": "FREQUENT",
+            "occasional": "OCCASIONAL",
+            "audienceQuestions": "Audience Questions",
+            "resolved": "Resolved",
+            "opportunity": "Opportunity",
+            "notRecommendedIf": "Not recommended if:",
+            "contentStrategy": "Content Strategy",
+            "recommendedHook": "Recommended Hook",
+            "bestPlatform": "Best platform",
+            "complexity": "Complexity",
+            "finalTitle": "Make decisions based on signals, not intuition.",
+            "finalSubtitle": "Save this full analysis and access advanced market signals with Valio Pro.",
+            "joinButton": "Join Early Access",
+            "downloadButton": "Download PDF",
+            "generating": "Generating...",
+            "validateAnother": "Validate another Idea",
+            "restart": "Start Over",
+            "verdicts": {
+                "create": {
+                    "label": "VALIDATED",
+                    "description": "Real demand signals detected."
+                },
+                "pilot": {
+                    "label": "TEST",
+                    "description": "Interest exists but requires a specific focus."
+                },
+                "indeterminate": {
+                    "label": "NO DATA",
+                    "description": "Not enough volume to decide."
+                },
+                "reconsider": {
+                    "label": "NOT RECOMMENDED",
+                    "description": "Zero demand or excessively saturated market."
+                }
+            }
+        }
+    },
+    "earlyAdopter": {
+        "step1": {
+            "badge": "Early Access",
+            "title": "🚀 Join Valio.pro Priority Access",
+            "limitTitle": "🎉 You've used up your free validations",
+            "subtitle": "We analyze real demand signals so you'll never create content nobody searches for again.",
+            "benefits": [
+                {
+                    "title": "+5 Extra Validations",
+                    "desc": "Receive an immediate bonus by registering today."
+                },
+                {
+                    "title": "Priority Access",
+                    "desc": "Be among the first to use Pro features."
+                },
+                {
+                    "title": "Founder Price",
+                    "desc": "Secure a lifetime -40% discount."
+                }
+            ],
+            "continue": "Continue registration"
+        },
+        "step2": {
+            "title": "Almost ready",
+            "subtitle": "Tell us a bit more to personalize your experience.",
+            "nameLabel": "Your name",
+            "namePlaceholder": "Ex: Fran Millán",
+            "emailLabel": "Work email",
+            "emailPlaceholder": "fran@valio.pro",
+            "nicheLabel": "Your niche or industry",
+            "nichePlaceholder": "Ex: SaaS B2B, eCommerce, Marketing...",
+            "submit": "Finish registration",
+            "submitting": "Registering...",
+            "back": "Go back"
+        },
+        "success": {
+            "title": "Welcome aboard!",
+            "subtitle": "Your validation bonus is now active. We'll notify you by email when we launch Pro features.",
+            "nextSteps": "Next steps",
+            "steps": [
+                "Check your inbox",
+                "Use your new validations",
+                "Give us feedback if anything fails"
+            ],
+            "close": "Start using"
+        },
+        "counter": {
+            "of": "of",
+            "remainingValidations": "Remaining validations",
+            "earlyAdopterBonus": "You are an Early Adopter: You have extra validations and priority access.",
+            "freeLimit": "Free plan limit. Join Early Access to get more.",
+            "noValidations": "No validations left",
+            "freePlan": "Free plan",
+            "earlyAdopter": "Early Adopter",
+            "upgrade": "Get more",
+            "proMember": "PRO",
+            "standard": "FREE"
+        },
+        "errors": {
+            "alreadyRegistered": "This email is already on the list.",
+            "generic": "An error occurred. Please try again."
+        }
+    }
+}

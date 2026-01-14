@@ -18,7 +18,7 @@ export function SolutionSection() {
                             La solución
                         </h2>
                         <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-                            <strong className="text-gray-900">ContentValidator</strong> es una plataforma de validación de ideas de contenido para negocios que venden con contenido.
+                            <strong className="text-gray-900">Valio.pro</strong> es una plataforma de validación de ideas de contenido para negocios que venden con contenido.
                         </p>
                     </div>
 
