@@ -9,7 +9,7 @@ export async function POST(req: NextRequest) {
         // No obstante, si el cliente pasa un clientId, el sistema de grabación en el frontend
         // se encargará de persistir el uso.
 
-        const { topic, audience, contentType, objective, audienceLevel } = await req.json();
+        const { topic, audience, contentType, objective, audienceLevel, language } = await req.json();
 
         if (!topic || topic.trim().length === 0) {
             return NextResponse.json(
@@ -24,7 +24,8 @@ export async function POST(req: NextRequest) {
             audience,
             contentType,
             objective,
-            audienceLevel
+            audienceLevel,
+            language
         });
 
         return NextResponse.json({

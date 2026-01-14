@@ -11,13 +11,14 @@ import { toast } from "sonner";
 import ValioLogo from "@/components/ui/ValioLogo";
 import { FAQSection } from "@/components/landing/FAQSection";
 import { CTASection } from "@/components/landing/CTASection";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 
 import { ValidationInput, ValidationResult } from "@/lib/perplexity";
 
 export default function LandingPage() {
   const tLanding = useTranslations("landing");
   const tCommon = useTranslations("common");
+  const locale = useLocale();
 
   const [isValidating, setIsValidating] = useState(false);
   const [result, setResult] = useState<ValidationResult | null>(null);
@@ -55,7 +56,8 @@ export default function LandingPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           ...inputData,
-          clientId: fingerprint
+          clientId: fingerprint,
+          language: locale
         }),
       });
 
@@ -173,8 +175,8 @@ export default function LandingPage() {
           <div id="results">
             <ResultsDisplay
               result={result}
-              topic={validatedTopic}
-              onReset={handleReset}
+              initialTopic={validatedTopic}
+              onRestart={handleReset}
               onReformulate={handleReformulate}
               onJoinWaitlist={() => {
                 setModalReason("voluntary");
