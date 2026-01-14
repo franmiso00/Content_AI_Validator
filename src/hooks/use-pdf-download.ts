@@ -1,6 +1,6 @@
-// src/hooks/use-pdf-download.ts
 import { useState } from 'react';
 import { generateReportPDF } from '@/lib/pdf/generate-report-pdf';
+import { useTranslations, useLocale } from 'next-intl';
 
 interface ValidationResult {
     demand_score: number;
@@ -46,9 +46,51 @@ export function usePDFDownload({ result, topic, audience }: UsePDFDownloadOption
     const [isGenerating, setIsGenerating] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
+    // Get translations
+    const tResults = useTranslations("validation.results");
+    const tCommon = useTranslations("common");
+    const tLanding = useTranslations("landing");
+    const tPDF = useTranslations("pdf");
+    const locale = useLocale();
+
     const downloadPDF = async () => {
         setIsGenerating(true);
         setError(null);
+
+        // Prepare translation object
+        const translations = {
+            reportTitle: tPDF("title"),
+            generatedDate: tPDF("generated"),
+            page: tPDF("page"),
+            of: tPDF("of"),
+            verdictTitle: tResults("verdictBadge").toUpperCase(),
+            audience: tPDF("audience"),
+            reasoning: tResults("reasoningTitle"),
+            idealFor: tPDF("idealFor"),
+            successCondition: tPDF("successCondition"),
+            demandTitle: tResults("demandAnalysis").toUpperCase(),
+            dataSignals: tPDF("dataSignals"),
+            conversations: tResults("conversationsAnalyzed"),
+            recency: tResults("freshness"),
+            engagement: "Engagement",
+            businessImpact: tResults("businessImpact").toUpperCase(),
+            objective: tResults("recommendedObjective"),
+            monetization: tResults("monetizationPotential"),
+            commercialRisks: tResults("commercialRisks"),
+            painPoints: tResults("painPoints").toUpperCase(),
+            questions: tResults("audienceQuestions").toUpperCase(),
+            notRecommended: tResults("notRecommendedIf").toUpperCase(),
+            contentAngles: tResults("contentStrategy").toUpperCase(),
+            hook: tResults("recommendedHook"),
+            confidenceLevel: tPDF("confidenceLevel"),
+            cta: "Visita valio.pro"
+        };
+
+        const formattedDate = new Date().toLocaleDateString(locale, {
+            day: 'numeric',
+            month: 'long',
+            year: 'numeric',
+        });
 
         try {
             // Map the complex result structure to the one expected by the PDF generator
@@ -61,6 +103,10 @@ export function usePDFDownload({ result, topic, audience }: UsePDFDownloadOption
                     reasoning: result.strategic_recommendation.reasoning,
                     target_fit: result.strategic_recommendation.target_fit || "Audiencia validada en señales de demanda.",
                     success_conditions: result.strategic_recommendation.success_conditions || "Enfoque en los dolores detectados.",
+                    // Pass translated verdict label/desc if needed, but the PDF generator might use the 'verdict' key to lookup styles. 
+                    // Better to pass translated texts for labels.
+                    verdictLabel: tResults(`verdicts.${result.strategic_recommendation.verdict}.label`),
+                    verdictDesc: tResults(`verdicts.${result.strategic_recommendation.verdict}.description`)
                 },
                 data_signals: {
                     conversations_analyzed: result.data_signals.total_conversations_analyzed,
@@ -89,6 +135,8 @@ export function usePDFDownload({ result, topic, audience }: UsePDFDownloadOption
                 topic,
                 audience,
                 filename: generateFilename(topic),
+                translations,
+                formattedDate
             });
         } catch (err) {
             setError('Error al generar el PDF. Por favor, intenta de nuevo.');

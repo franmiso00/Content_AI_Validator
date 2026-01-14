@@ -13,6 +13,8 @@ interface ValidationResult {
         reasoning: string[];
         target_fit: string;
         success_conditions: string;
+        verdictLabel?: string;
+        verdictDesc?: string;
     };
     data_signals: {
         conversations_analyzed: number;
@@ -36,15 +38,45 @@ interface ValidationResult {
     confidence_score: number;
 }
 
+export interface PDFTranslations {
+    reportTitle: string;
+    generatedDate: string;
+    page: string;
+    of: string;
+    verdictTitle: string;
+    audience: string;
+    reasoning: string;
+    idealFor: string;
+    successCondition: string;
+    demandTitle: string;
+    dataSignals: string;
+    conversations: string;
+    recency: string;
+    engagement: string;
+    businessImpact: string;
+    objective: string;
+    monetization: string;
+    commercialRisks: string;
+    painPoints: string;
+    questions: string;
+    notRecommended: string;
+    contentAngles: string;
+    hook: string;
+    confidenceLevel: string;
+    cta: string;
+}
+
 interface GeneratePDFOptions {
     result: ValidationResult;
     topic: string;
     audience?: string;
     filename: string;
+    translations: PDFTranslations;
+    formattedDate: string;
 }
 
 export async function generateReportPDF(options: GeneratePDFOptions): Promise<void> {
-    const { result, topic, audience, filename } = options;
+    const { result, topic, audience, filename, translations } = options;
 
     const doc = new jsPDF({
         orientation: 'portrait',
@@ -61,33 +93,33 @@ export async function generateReportPDF(options: GeneratePDFOptions): Promise<vo
     // Configurar metadatos del documento
     doc.setProperties({
         title: `Valio Report - ${topic}`,
-        subject: 'Reporte de Validación de Contenido',
+        subject: translations.reportTitle,
         author: 'Valio.pro',
         creator: 'Valio.pro',
     });
 
     // === PÁGINA 1: Portada y Veredicto ===
-    renderHeader(doc, pageWidth, margin);
-    renderVerdictPage(doc, result, topic, audience, margin, contentWidth, contentStartY);
-    renderFooter(doc, pageWidth, pageHeight, margin, 1, 4);
+    renderHeader(doc, pageWidth, margin, translations);
+    renderVerdictPage(doc, result, topic, audience, margin, contentWidth, contentStartY, translations);
+    renderFooter(doc, pageWidth, pageHeight, margin, 1, 4, translations, options.formattedDate);
 
     // === PÁGINA 2: Análisis de Demanda ===
     doc.addPage();
-    renderHeader(doc, pageWidth, margin);
-    renderDemandAnalysisPage(doc, result, margin, contentWidth, contentStartY);
-    renderFooter(doc, pageWidth, pageHeight, margin, 2, 4);
+    renderHeader(doc, pageWidth, margin, translations);
+    renderDemandAnalysisPage(doc, result, margin, contentWidth, contentStartY, translations);
+    renderFooter(doc, pageWidth, pageHeight, margin, 2, 4, translations, options.formattedDate);
 
     // === PÁGINA 3: Insights del Mercado ===
     doc.addPage();
-    renderHeader(doc, pageWidth, margin);
-    renderMarketInsightsPage(doc, result, margin, contentWidth, contentStartY);
-    renderFooter(doc, pageWidth, pageHeight, margin, 3, 4);
+    renderHeader(doc, pageWidth, margin, translations);
+    renderMarketInsightsPage(doc, result, margin, contentWidth, contentStartY, translations);
+    renderFooter(doc, pageWidth, pageHeight, margin, 3, 4, translations, options.formattedDate);
 
     // === PÁGINA 4: Ángulos de Contenido ===
     doc.addPage();
-    renderHeader(doc, pageWidth, margin);
-    renderContentAnglesPage(doc, result, margin, contentWidth, contentStartY);
-    renderFooter(doc, pageWidth, pageHeight, margin, 4, 4);
+    renderHeader(doc, pageWidth, margin, translations);
+    renderContentAnglesPage(doc, result, margin, contentWidth, contentStartY, translations);
+    renderFooter(doc, pageWidth, pageHeight, margin, 4, 4, translations, options.formattedDate);
 
     // Guardar el PDF
     doc.save(filename);
@@ -97,7 +129,7 @@ export async function generateReportPDF(options: GeneratePDFOptions): Promise<vo
 // HEADER & FOOTER
 // ============================================
 
-function renderHeader(doc: jsPDF, pageWidth: number, margin: number): void {
+function renderHeader(doc: jsPDF, pageWidth: number, margin: number, t: PDFTranslations): void {
     const headerHeight = PDF_CONFIG.headerHeight;
 
     // Fondo con color azul primario
@@ -114,7 +146,7 @@ function renderHeader(doc: jsPDF, pageWidth: number, margin: number): void {
     doc.setTextColor(VALIO_COLORS.white);
     doc.setFont('helvetica', 'normal');
     doc.setFontSize(10);
-    doc.text('Reporte de Validación', pageWidth - margin, 15, { align: 'right' });
+    doc.text(t.reportTitle, pageWidth - margin, 15, { align: 'right' });
 }
 
 function renderFooter(
@@ -123,7 +155,9 @@ function renderFooter(
     pageHeight: number,
     margin: number,
     currentPage: number,
-    totalPages: number
+    totalPages: number,
+    t: PDFTranslations,
+    formattedDate: string
 ): void {
     const footerY = pageHeight - 10;
 
@@ -132,20 +166,13 @@ function renderFooter(
     doc.setLineWidth(0.2);
     doc.line(margin, footerY - 5, pageWidth - margin, footerY - 5);
 
-    // Fecha de generación
-    const dateStr = new Date().toLocaleDateString('es-ES', {
-        day: 'numeric',
-        month: 'long',
-        year: 'numeric',
-    });
-
     doc.setFont('helvetica', 'normal');
     doc.setFontSize(8);
     doc.setTextColor(VALIO_COLORS.textMuted);
-    doc.text(`Generado: ${dateStr} · valio.pro`, margin, footerY);
+    doc.text(`${t.generatedDate}: ${formattedDate} · valio.pro`, margin, footerY);
 
     // Número de página
-    doc.text(`Página ${currentPage} de ${totalPages}`, pageWidth - margin, footerY, { align: 'right' });
+    doc.text(`${t.page} ${currentPage} ${t.of} ${totalPages}`, pageWidth - margin, footerY, { align: 'right' });
 }
 
 // ============================================
@@ -159,7 +186,8 @@ function renderVerdictPage(
     audience: string | undefined,
     margin: number,
     contentWidth: number,
-    startY: number
+    startY: number,
+    t: PDFTranslations
 ): void {
     let y = startY + 10;
 
@@ -167,7 +195,7 @@ function renderVerdictPage(
     doc.setFont('helvetica', 'bold');
     doc.setFontSize(VALIO_FONTS.heading1);
     doc.setTextColor(VALIO_COLORS.primary);
-    doc.text('VEREDICTO ESTRATÉGICO', margin + contentWidth / 2, y, { align: 'center' });
+    doc.text(t.verdictTitle, margin + contentWidth / 2, y, { align: 'center' });
 
     y += 15;
 
@@ -186,7 +214,7 @@ function renderVerdictPage(
         doc.setFont('helvetica', 'normal');
         doc.setFontSize(VALIO_FONTS.small);
         doc.setTextColor(VALIO_COLORS.textSecondary);
-        doc.text(`Audiencia: ${audience}`, margin + contentWidth / 2, y + 28, { align: 'center' });
+        doc.text(`${t.audience}: ${audience}`, margin + contentWidth / 2, y + 28, { align: 'center' });
     }
 
     y += 45;
@@ -218,19 +246,26 @@ function renderVerdictPage(
     doc.setFont('helvetica', 'bold');
     doc.setFontSize(VALIO_FONTS.heading2);
     doc.setTextColor(verdictConfig.color);
-    doc.text(verdictConfig.label.toUpperCase(), iconX + 30, iconY + 12);
+
+    // Use translated label if available, otherwise default
+    const label = result.strategic_recommendation.verdictLabel || verdictConfig.label;
+    doc.text(label.toUpperCase(), iconX + 30, iconY + 12);
 
     doc.setFont('helvetica', 'normal');
     doc.setFontSize(VALIO_FONTS.small);
     doc.setTextColor(VALIO_COLORS.textSecondary);
-    doc.text(verdictConfig.description, iconX + 30, iconY + 20);
+
+    // Use translated desc if available, otherwise default
+    const desc = result.strategic_recommendation.verdictDesc || verdictConfig.description;
+    const descLines = doc.splitTextToSize(desc, contentWidth - 60);
+    doc.text(descLines, iconX + 30, iconY + 20);
 
     // Razonamiento
     let razonamientoY = y + 45;
     doc.setFont('helvetica', 'bold');
     doc.setFontSize(VALIO_FONTS.small);
     doc.setTextColor(VALIO_COLORS.textPrimary);
-    doc.text('Razonamiento:', margin + 15, razonamientoY);
+    doc.text(`${t.reasoning}:`, margin + 15, razonamientoY);
 
     razonamientoY += 2;
     doc.setFont('helvetica', 'normal');
@@ -260,7 +295,7 @@ function renderVerdictPage(
     doc.setFont('helvetica', 'bold');
     doc.setFontSize(VALIO_FONTS.caption);
     doc.setTextColor(VALIO_COLORS.textMuted);
-    doc.text('IDEAL PARA', margin + 8, y + 10);
+    doc.text(t.idealFor, margin + 8, y + 10);
 
     doc.setFont('helvetica', 'normal');
     doc.setFontSize(VALIO_FONTS.small);
@@ -275,7 +310,7 @@ function renderVerdictPage(
     doc.setFont('helvetica', 'bold');
     doc.setFontSize(VALIO_FONTS.caption);
     doc.setTextColor(VALIO_COLORS.textMuted);
-    doc.text('CONDICIÓN DE ÉXITO', margin + infoBoxWidth + 18, y + 10);
+    doc.text(t.successCondition, margin + infoBoxWidth + 18, y + 10);
 
     doc.setFont('helvetica', 'normal');
     doc.setFontSize(VALIO_FONTS.small);
@@ -293,7 +328,8 @@ function renderDemandAnalysisPage(
     result: ValidationResult,
     margin: number,
     contentWidth: number,
-    startY: number
+    startY: number,
+    t: PDFTranslations
 ): void {
     let y = startY + 10;
 
@@ -301,7 +337,7 @@ function renderDemandAnalysisPage(
     doc.setFont('helvetica', 'bold');
     doc.setFontSize(VALIO_FONTS.heading1);
     doc.setTextColor(VALIO_COLORS.textPrimary);
-    doc.text('ANÁLISIS DE DEMANDA', margin, y);
+    doc.text(t.demandTitle, margin, y);
 
     y += 15;
 
@@ -360,15 +396,15 @@ function renderDemandAnalysisPage(
     doc.setFont('helvetica', 'bold');
     doc.setFontSize(VALIO_FONTS.heading2);
     doc.setTextColor(VALIO_COLORS.textPrimary);
-    doc.text('SEÑALES DE DATOS', margin, y);
+    doc.text(t.dataSignals, margin, y);
 
     y += 12;
 
     const signalBoxWidth = (contentWidth - 20) / 3;
     const signals = [
-        { label: 'Conversaciones', value: result.data_signals.conversations_analyzed.toString() },
-        { label: 'Recencia', value: result.data_signals.recency },
-        { label: 'Engagement', value: result.data_signals.engagement_type },
+        { label: t.conversations, value: result.data_signals.conversations_analyzed.toString() },
+        { label: t.recency, value: result.data_signals.recency },
+        { label: t.engagement, value: result.data_signals.engagement_type },
     ];
 
     signals.forEach((signal, index) => {
@@ -380,7 +416,10 @@ function renderDemandAnalysisPage(
         doc.setFont('helvetica', 'normal');
         doc.setFontSize(VALIO_FONTS.caption);
         doc.setTextColor(VALIO_COLORS.textMuted);
-        doc.text(signal.label.toUpperCase(), x + signalBoxWidth / 2, y + 12, { align: 'center' });
+
+        // Handle long labels like "Conversaciones Analizadas"
+        const labelLines = doc.splitTextToSize(signal.label.toUpperCase(), signalBoxWidth - 4);
+        doc.text(labelLines, x + signalBoxWidth / 2, y + 12, { align: 'center' });
 
         doc.setFont('helvetica', 'bold');
         doc.setFontSize(VALIO_FONTS.heading3);
@@ -388,7 +427,7 @@ function renderDemandAnalysisPage(
 
         // Split value if too long
         const valLines = doc.splitTextToSize(signal.value, signalBoxWidth - 10);
-        doc.text(valLines[0], x + signalBoxWidth / 2, y + 25, { align: 'center' });
+        doc.text(valLines[0], x + signalBoxWidth / 2, y + 27, { align: 'center' });
     });
 
     y += 55;
@@ -397,7 +436,7 @@ function renderDemandAnalysisPage(
     doc.setFont('helvetica', 'bold');
     doc.setFontSize(VALIO_FONTS.heading2);
     doc.setTextColor(VALIO_COLORS.textPrimary);
-    doc.text('IMPACTO DE NEGOCIO', margin, y);
+    doc.text(t.businessImpact, margin, y);
 
     y += 12;
 
@@ -406,9 +445,9 @@ function renderDemandAnalysisPage(
     doc.roundedRect(margin, y, contentWidth, 60, 4, 4, 'FD');
 
     const businessItems = [
-        { label: 'Objetivo principal', value: result.business_impact.primary_objective.toUpperCase() },
-        { label: 'Potencial monetización', value: result.business_impact.monetization_potential },
-        { label: 'Riesgos comerciales', value: result.business_impact.commercial_risks },
+        { label: t.objective, value: result.business_impact.primary_objective.toUpperCase() },
+        { label: t.monetization, value: result.business_impact.monetization_potential },
+        { label: t.commercialRisks, value: result.business_impact.commercial_risks },
     ];
 
     let itemY = y + 15;
@@ -439,7 +478,8 @@ function renderMarketInsightsPage(
     result: ValidationResult,
     margin: number,
     contentWidth: number,
-    startY: number
+    startY: number,
+    t: PDFTranslations
 ): void {
     let y = startY + 10;
 
@@ -447,7 +487,7 @@ function renderMarketInsightsPage(
     doc.setFont('helvetica', 'bold');
     doc.setFontSize(VALIO_FONTS.heading2);
     doc.setTextColor(VALIO_COLORS.textPrimary);
-    doc.text('DOLORES Y FRUSTRACIONES DETECTADOS', margin, y);
+    doc.text(t.painPoints, margin, y);
 
     y += 10;
 
@@ -479,7 +519,7 @@ function renderMarketInsightsPage(
     doc.setFont('helvetica', 'bold');
     doc.setFontSize(VALIO_FONTS.heading2);
     doc.setTextColor(VALIO_COLORS.textPrimary);
-    doc.text('PREGUNTAS FRECUENTES DE LA AUDIENCIA', margin, y);
+    doc.text(t.questions, margin, y);
 
     y += 10;
 
@@ -510,7 +550,7 @@ function renderMarketInsightsPage(
     doc.setFont('helvetica', 'bold');
     doc.setFontSize(VALIO_FONTS.heading2);
     doc.setTextColor(VALIO_COLORS.verdictReconsider);
-    doc.text('⚠️ NO RECOMENDADO SI...', margin, y);
+    doc.text(`⚠️ ${t.notRecommended}`, margin, y);
 
     y += 10;
 
@@ -537,14 +577,15 @@ function renderContentAnglesPage(
     result: ValidationResult,
     margin: number,
     contentWidth: number,
-    startY: number
+    startY: number,
+    t: PDFTranslations
 ): void {
     let y = startY + 10;
 
     doc.setFont('helvetica', 'bold');
     doc.setFontSize(VALIO_FONTS.heading1);
     doc.setTextColor(VALIO_COLORS.textPrimary);
-    doc.text('ÁNGULOS DE CONTENIDO RECOMENDADOS', margin, y);
+    doc.text(t.contentAngles, margin, y);
 
     y += 15;
 
@@ -579,12 +620,12 @@ function renderContentAnglesPage(
         doc.setFont('helvetica', 'bold');
         doc.setFontSize(VALIO_FONTS.small);
         doc.setTextColor(VALIO_COLORS.textMuted);
-        doc.text('HOOK:', margin + 10, y + 20);
+        doc.text(`${t.hook.toUpperCase()}:`, margin + 10, y + 20);
 
         doc.setFont('helvetica', 'italic');
         doc.setTextColor(VALIO_COLORS.textPrimary);
         const hookLines = doc.splitTextToSize(`"${angle.hook}"`, contentWidth - 30);
-        doc.text(hookLines[0], margin + 22, y + 20);
+        doc.text(hookLines[0], margin + 42, y + 20); // Adjusted x position
 
         doc.setFont('helvetica', 'normal');
         doc.setFontSize(VALIO_FONTS.small);
@@ -604,7 +645,7 @@ function renderContentAnglesPage(
     doc.setFont('helvetica', 'bold');
     doc.setFontSize(VALIO_FONTS.heading3);
     doc.setTextColor(VALIO_COLORS.textPrimary);
-    doc.text(`NIVEL DE CONFIANZA: ${result.confidence_score}%`, margin + contentWidth / 2, y + 12, { align: 'center' });
+    doc.text(`${t.confidenceLevel}: ${result.confidence_score}%`, margin + contentWidth / 2, y + 12, { align: 'center' });
 
     const confBarX = margin + 30;
     const confBarY = y + 18;
@@ -627,5 +668,5 @@ function renderContentAnglesPage(
     doc.setFont('helvetica', 'bold');
     doc.setFontSize(VALIO_FONTS.body);
     doc.setTextColor(VALIO_COLORS.white);
-    doc.text('¿Necesitas más validaciones? Visita valio.pro', margin + contentWidth / 2, y + 12, { align: 'center' });
+    doc.text(t.cta, margin + contentWidth / 2, y + 12, { align: 'center' });
 }

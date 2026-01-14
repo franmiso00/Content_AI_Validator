@@ -29,6 +29,17 @@
             "joinEarlyAccess": "Unirme al Early Access"
         }
     },
+    "pdf": {
+        "title": "Reporte de Validación",
+        "generated": "Generado el",
+        "page": "Página",
+        "of": "de",
+        "idealFor": "IDEAL PARA",
+        "successCondition": "CONDICIÓN DE ÉXITO",
+        "dataSignals": "SEÑALES DE DATOS",
+        "confidenceLevel": "NIVEL DE CONFIANZA",
+        "audience": "Audiencia"
+    },
     "landing": {
         "header": {
             "howItWorks": "Cómo funciona",
