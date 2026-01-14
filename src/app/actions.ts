@@ -14,7 +14,13 @@ export async function validateIdea(topic: string, audience?: string) {
     }
 
     // 1. Call Perplexity
-    const result = await perplexityValidate(topic, audience);
+    const result = await perplexityValidate({
+        topic,
+        audience: audience || "",
+        contentType: "article",
+        objective: "authority",
+        audienceLevel: "intermediate"
+    });
 
     // 2. Save to Supabase
     const { data, error } = await supabase

@@ -1,50 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
 import { validateIdea as perplexityValidate } from "@/lib/perplexity";
 
-// Simple in-memory rate limiting (for production, use Redis or similar)
-const rateLimitMap = new Map<string, { count: number; resetTime: number }>();
-
-function getRateLimitKey(req: NextRequest): string {
-    const forwarded = req.headers.get("x-forwarded-for");
-    const ip = forwarded ? forwarded.split(",")[0] : "unknown";
-    return ip;
-}
-
-function checkRateLimit(key: string): { allowed: boolean; remaining: number } {
-    const now = Date.now();
-    const limit = rateLimitMap.get(key);
-
-    if (!limit || now > limit.resetTime) {
-        // Reset or create new limit (5 requests per hour)
-        rateLimitMap.set(key, {
-            count: 1,
-            resetTime: now + 60 * 60 * 1000, // 1 hour
-        });
-        return { allowed: true, remaining: 4 };
-    }
-
-    if (limit.count >= 5) {
-        return { allowed: false, remaining: 0 };
-    }
-
-    limit.count++;
-    return { allowed: true, remaining: 5 - limit.count };
-}
+// La lógica de rate limiting ahora se maneja vía Supabase y el endpoint /api/rate-limit
 
 export async function POST(req: NextRequest) {
     try {
-        // Rate limiting
-        const rateLimitKey = getRateLimitKey(req);
-        const { allowed, remaining } = checkRateLimit(rateLimitKey);
+        // El control de acceso (isLimited) se realiza ahora en el frontend antes de llamar a este endpoint.
+        // No obstante, si el cliente pasa un clientId, el sistema de grabación en el frontend
+        // se encargará de persistir el uso.
 
-        if (!allowed) {
-            return NextResponse.json(
-                { error: "Rate limit exceeded. Please sign up for unlimited validations." },
-                { status: 429 }
-            );
-        }
-
-        const { topic, audience } = await req.json();
+        const { topic, audience, contentType, objective, audienceLevel } = await req.json();
 
         if (!topic || topic.trim().length === 0) {
             return NextResponse.json(
@@ -54,11 +19,17 @@ export async function POST(req: NextRequest) {
         }
 
         // Call Perplexity
-        const result = await perplexityValidate(topic, audience);
+        const result = await perplexityValidate({
+            topic,
+            audience,
+            contentType,
+            objective,
+            audienceLevel
+        });
 
         return NextResponse.json({
             ...result,
-            remaining_validations: remaining,
+            remaining_validations: 0, // El contador real se gestiona en el frontend ahora
         });
     } catch (error: any) {
         console.error("[validate-demo] Error:", error);

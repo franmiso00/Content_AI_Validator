@@ -1,228 +1,310 @@
-export interface PerplexityResponse {
+export interface ValidationInput {
+    topic: string;
+    audience?: string;
+    contentType?: string;      // article | newsletter | video-long | video-short | social | guide
+    objective?: string;        // leads | sales | authority | awareness
+    audienceLevel?: string;    // beginner | intermediate | advanced
+}
+
+export interface FormatAssessment {
+    chosen_format: string;
+    recommended_format: string;
+    is_optimal: boolean;
+    reasoning: string;
+    alternative_suggestion?: string;
+}
+
+export interface ObjectiveAssessment {
+    chosen_objective: string;
+    recommended_objective: "leads" | "authority" | "sales" | "awareness";
+    is_aligned: boolean;
+    reasoning: string;
+}
+
+export interface AudienceLevelAssessment {
+    chosen_level: string;
+    recommended_level: "beginner" | "intermediate" | "advanced";
+    is_appropriate: boolean;
+    reasoning: string;
+}
+
+export type VerdictStatus = 'create' | 'pilot' | 'reconsider' | 'indeterminate';
+
+export interface ReformulationSuggestion {
+    type: 'broader_terms' | 'alternative_keywords' | 'different_angle' | 'other_sources';
+    suggestion: string;
+    example?: string;
+}
+
+export interface ValidationResult {
     demand_score: number;
-    demand_interpretation: string; // e.g., "Demanda sólida en nicho emergente"
+    demand_interpretation: string;
     demand_summary: string;
+    format_assessment: FormatAssessment;
+    objective_assessment: ObjectiveAssessment;
+    audience_level_assessment: AudienceLevelAssessment;
+
+    // NEW: Detailed source breakdown
+    sources_analyzed: {
+        platform: string;           // "Reddit" | "Quora" | "HackerNews" | etc.
+        discussions_found: number;  // Cantidad de hilos/posts encontrados
+        relevance: "high" | "medium" | "low";
+        sample_topics: string[];    // 2-3 temas ejemplo encontrados
+        citations?: string[];       // NUEVO: 2-3 URLs de hilos específicos
+    }[];
+
     strategic_recommendation: {
-        verdict: "create" | "pilot" | "reconsider";
+        verdict: VerdictStatus;
         reasoning: string[];
         target_fit: string;
         success_conditions: string;
     };
     data_signals: {
-        conversations_analyzed: number;
+        total_conversations_analyzed: number; // Changed from conversations_analyzed
+        primary_platform: string;              // NEW
         recency: string;
         engagement_type: string;
     };
+
+    // NEW: Competitive analysis
+    competitive_landscape: {
+        content_saturation: "low" | "medium" | "high";
+        dominant_formats: string[];
+        gap_opportunities: string[];
+    };
+
     business_impact: {
-        primary_objective: "leads" | "authority" | "sales";
+        primary_objective: "leads" | "authority" | "sales" | "awareness";
         monetization_potential: string;
         commercial_risks: string;
     };
-    pain_points: string[];
-    questions: string[];
+
+    // UPDATED: Objects with metadata
+    pain_points: {
+        pain: string;
+        source: string;
+        frequency: "common" | "occasional" | "rare";
+    }[];
+
+    // UPDATED: Objects with metadata
+    questions: {
+        question: string;
+        source: string;
+        answered_well: boolean;
+    }[];
+
     content_angles: {
         format: string;
         hook: string;
         complexity: "básico" | "avanzado";
         description: string;
+        best_platform_to_publish: string;  // NEW
     }[];
     not_recommended_if: string[];
     confidence_score: number;
+    confidence_level: 'high' | 'medium' | 'low' | 'insufficient';
+    confidence_percentage: number;
+    suggestions?: ReformulationSuggestion[];
+    remaining_validations?: number;
 }
 
-// Helper to validate that all required fields exist in the AI response
-function isValidPerplexityResponse(obj: any): obj is PerplexityResponse {
-    if (!obj || typeof obj !== 'object') return false;
+const apiKey = process.env.PERPLEXITY_API_KEY;
 
-    const requiredKeys: (keyof PerplexityResponse)[] = [
-        "demand_score",
-        "demand_interpretation",
-        "demand_summary",
-        "strategic_recommendation",
-        "data_signals",
-        "business_impact",
-        "pain_points",
-        "questions",
-        "content_angles",
-        "not_recommended_if",
-        "confidence_score"
-    ];
+export async function validateIdea(input: ValidationInput): Promise<ValidationResult> {
+    const { topic, audience, contentType, objective, audienceLevel } = input;
 
-    for (const key of requiredKeys) {
-        if (obj[key] === undefined || obj[key] === null) {
-            console.warn(`[perplexity] Missing required field: ${key}`);
-            return false;
-        }
-    }
+    const systemPrompt = `You are a strategic market research API for high-ticket B2B businesses. Your goal is to help users decide if a content idea is worth the investment.
 
-    // Deeper check for nested required objects
-    if (!obj.strategic_recommendation.verdict || !Array.isArray(obj.strategic_recommendation.reasoning)) return false;
-    if (!obj.data_signals.engagement_type) return false;
-    if (!obj.business_impact.primary_objective || !obj.business_impact.monetization_potential) return false;
-    if (!Array.isArray(obj.content_angles) || obj.content_angles.length === 0) return false;
-
-    return true;
-}
-
-export async function validateIdea(topic: string, audience?: string): Promise<PerplexityResponse> {
-    const apiKey = process.env.PERPLEXITY_API_KEY;
-    if (!apiKey) {
-        throw new Error("PERPLEXITY_API_KEY is not set");
-    }
-
-    const systemPrompt = `Eres un experto analista de investigación de mercado. 
-Valida la siguiente idea de contenido para un negocio high-ticket.
-RESPONDE SIEMPRE EN ESPAÑOL.
-
-Estructura JSON requerida (asegúrate de incluir TODOS los campos):
-{
-  "demand_score": <number 0-100>,
-  "demand_interpretation": "<string>",
-  "demand_summary": "<string>",
-  "strategic_recommendation": {
-    "verdict": "create" | "pilot" | "reconsider",
-    "reasoning": ["<string>", "<string>", "<string>"],
-    "target_fit": "<string>",
-    "success_conditions": "<string>"
-  },
-  "data_signals": {
-    "conversations_analyzed": <number>,
-    "recency": "<string>",
-    "engagement_type": "<string>"
-  },
-  "business_impact": {
-    "primary_objective": "leads" | "authority" | "sales",
-    "monetization_potential": "<string>",
-    "commercial_risks": "<string>"
-  },
-  "pain_points": ["<string>", "<string>", "<string>", "<string>", "<string>"],
-  "questions": ["<string>", "<string>", "<string>"],
-  "content_angles": [
-    {
-      "format": "<string>",
-      "hook": "<string>",
-      "complexity": "básico" | "avanzado",
-      "description": "<string>"
-    }
-  ],
-  "not_recommended_if": ["<string>", "<string>"],
-  "confidence_score": <number 0-100>
-}
-
-REGLAS:
-- Sin comillas dobles dentro de los textos (usa comillas simples).
-- Sin markdown, sin bloques de código, sin citas.
-- Idioma: Español.
+IMPORTANT: Search for discussions about this topic across MULTIPLE platforms to provide comprehensive market intelligence.
 
 Topic: "${topic}"
-${audience ? `Target Audience: "${audience}"` : ""}
-`;
+Target Audience: "${audience || "General"}"
+Chosen Format: "${contentType || "Not specified"}"
+Chosen Objective: "${objective || "Not specified"}"
+Chosen Audience Level: "${audienceLevel || "Not specified"}"
 
-    // Retry mechanism
-    let lastError: any = null;
-    for (let attempt = 1; attempt <= 2; attempt++) {
-        try {
-            const response = await fetch("https://api.perplexity.ai/chat/completions", {
-                method: "POST",
-                headers: {
-                    "Authorization": `Bearer ${apiKey}`,
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    model: "sonar",
-                    messages: [
-                        {
-                            role: "system",
-                            content: "Eres un API que solo responde en JSON puro. Sin descripciones, sin markdown, sin citas. Idioma: Español."
-                        },
-                        { role: "user", content: systemPrompt }
-                    ],
-                    temperature: 0.1,
-                    max_tokens: 4000,
-                })
-            });
+PLATFORMS TO SEARCH (in order of priority):
+1. Reddit - ALWAYS search specific subreddits related to ${audience || "the topic"} to find real user conversations.
+2. YouTube - Search for video titles and comments about the topic.
+3. Quora - Questions and detailed answers about the topic.
+4. Hacker News - Tech/startup/business discussions.
+5. Stack Exchange - Q&A sites relevant to the industry.
+6. IndieHackers - Founder and entrepreneur discussions.
+7. Specialized forums - Industry-specific communities for ${audience || "professionals"}.
+8. LinkedIn (public posts) - B2B professional discussions.
+9. Medium/Substack - Published content and comments.
 
+Output ONLY a valid JSON object. Do not include markdown, code blocks, or explanations. RESPUESTAS SIEMPRE EN ESPAÑOL.
 
-            if (!response.ok) {
-                const errorText = await response.text();
-                throw new Error(`Perplexity API error: ${response.status} - ${errorText}`);
-            }
+Required JSON Structure:
+{
+  "demand_score": <number 0-100>,
+  "demand_interpretation": "<short semantic category: e.g. 'Demanda sólida en nicho emergente'>",
+  "demand_summary": "<2-sentence overview of market state across all platforms>",
+  
+  "format_assessment": {
+    "chosen_format": "${contentType}",
+    "recommended_format": "<ideal format>",
+    "is_optimal": <boolean>,
+    "reasoning": "<why it is or isn't optimal>"
+  },
+  
+  "objective_assessment": {
+    "chosen_objective": "${objective}",
+    "recommended_objective": "leads" | "authority" | "sales" | "awareness",
+    "is_aligned": <boolean>,
+    "reasoning": "<why this objective fits>"
+  },
+  
+  "audience_level_assessment": {
+    "chosen_level": "${audienceLevel}",
+    "recommended_level": "beginner" | "intermediate" | "advanced",
+    "is_appropriate": <boolean>,
+    "reasoning": "<why this level is adequate>"
+  },
 
-            const data = await response.json();
-            const content = data.choices[0]?.message?.content;
-            if (!content) throw new Error("No content returned from Perplexity");
-
-            console.log(`[perplexity] Raw content (attempt ${attempt}):`, content.substring(0, 200) + "...");
-
-            // --- STEP-BY-STEP SANITATION ---
-            let rawContent = content.trim();
-
-            // 1. Initial cleanup: remove blocks and citations
-            rawContent = rawContent.replace(/```json\n?|\n?```/g, "");
-            rawContent = rawContent.replace(/\[\d+\]/g, "");
-
-            // 2. Extract JSON part
-            const start = rawContent.indexOf("{");
-            const end = rawContent.lastIndexOf("}");
-            if (start === -1) throw new Error("No JSON found in response");
-            let jsonString = rawContent.substring(start, (end !== -1 ? end + 1 : undefined));
-
-            // Protection against double braces or leading garbage that looks like a brace
-            jsonString = jsonString.trim();
-            while (jsonString.startsWith("{{") && jsonString.endsWith("}}")) {
-                jsonString = jsonString.substring(1, jsonString.length - 1).trim();
-            }
-
-            // 3. Fix forbidden control characters (except whitespace: \n, \r, \t)
-            // JSON.parse allows \n, \r, \t as whitespace, but forbidden characters 0-31 must be handled.
-            // We'll remove non-printable characters except whitespace.
-            jsonString = jsonString.replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F-\u009F]/g, "");
-
-            // 4. Attempt parse and strict validation
-            let parsed;
-            try {
-                parsed = JSON.parse(jsonString);
-            } catch (pErr: any) {
-                console.warn(`[perplexity] JSON parse failed. Error detail: ${pErr.message}`);
-
-                // Mild Repair if parse fails
-                let mildRepair = jsonString.trim();
-                mildRepair = mildRepair.replace(/,\s*([\}\]])/g, "$1");
-
-                let braces = 0;
-                let inQ = false;
-                for (let i = 0; i < mildRepair.length; i++) {
-                    const c = mildRepair[i];
-                    if (c === '"' && (i === 0 || mildRepair[i - 1] !== '\\')) inQ = !inQ;
-                    if (!inQ) {
-                        if (c === "{") braces++;
-                        if (c === "}") braces--;
-                    }
-                }
-                if (inQ) mildRepair += '"';
-                if (braces > 0) mildRepair += "}".repeat(braces);
-
-                try {
-                    parsed = JSON.parse(mildRepair);
-                } catch (rErr: any) {
-                    console.error(`[perplexity] Mild repair also failed. Final string snippet: ${mildRepair.substring(0, 50)}`);
-                    throw pErr; // Throw original error
-                }
-            }
-
-            if (isValidPerplexityResponse(parsed)) {
-                console.log("[perplexity] Validation successful");
-                return parsed;
-            } else {
-                throw new Error("JSON structure is incomplete or invalid");
-            }
-
-        } catch (error: any) {
-            lastError = error;
-            console.error(`[perplexity] Attempt ${attempt} failed:`, error.message);
-            if (attempt === 2) throw error;
-            await new Promise(resolve => setTimeout(resolve, 800)); // Slightly longer wait
-        }
+  "sources_analyzed": [
+    {
+      "platform": "<platform name>",
+      "discussions_found": <number>,
+      "relevance": "high" | "medium" | "low",
+      "sample_topics": ["<topic 1>", "<topic 2>"],
+      "citations": ["<url 1>", "<url 2>"]
     }
-    throw lastError;
+  ],
+  
+  "strategic_recommendation": {
+    "verdict": "create" | "pilot" | "reconsider",
+    "reasoning": ["<reason 1>", "<reason 2>"],
+    "target_fit": "<who this is specifically for>",
+    "success_conditions": "<specific conditions for success>"
+  },
+  
+  "data_signals": {
+    "total_conversations_analyzed": <total number across all platforms>,
+    "primary_platform": "<platform with most relevant discussions>",
+    "recency": "<freshness of data, e.g. 'frecuente últimos 60 días'>",
+    "engagement_type": "<primary type: preguntas, quejas, debates, tutoriales>"
+  },
+  
+  "business_impact": {
+    "primary_objective": "leads" | "authority" | "sales",
+    "monetization_potential": "<potential via newsletter, upsell, service, etc.>",
+    "commercial_risks": "<risks like small niche, high legal compliance, etc.>"
+  },
+  
+  "pain_points": [
+    {
+      "pain": "<description>",
+      "source": "<platform where this was found>",
+      "frequency": "common" | "occasional" | "rare"
+    }
+  ],
+  
+  "questions": [
+    {
+      "question": "<question text>",
+      "source": "<platform>",
+      "answered_well": <boolean - is this already well-answered online?>
+    }
+  ],
+  
+  "content_angles": [
+    {
+      "format": "<recommended format: newsletter, guide, video script, thread>",
+      "hook": "<main hook/headline idea>",
+      "complexity": "básico" | "avanzado",
+      "description": "<actionable description>",
+      "best_platform_to_publish": "<where this would perform best>"
+    }
+  ],
+  
+  "competitive_landscape": {
+    "content_saturation": "low" | "medium" | "high",
+    "dominant_formats": ["<format 1>", "<format 2>"],
+    "gap_opportunities": ["<opportunity 1>", "<opportunity 2>"]
+  },
+  
+  "not_recommended_if": ["<condition 1>", "<condition 2>"],
+
+  "confidence_level": "insufficient" | "low" | "medium" | "high",
+  "confidence_percentage": <number 0-100>,
+  "confidence_score": <number 0-100>,
+  "suggestions": [
+     {
+       "type": "broader_terms" | "alternative_keywords" | "different_angle" | "other_sources",
+       "suggestion": "<descripción breve>",
+       "example": "<ejemplo de nueva búsqueda>"
+     }
+  ]
+}
+
+### LÓGICA DE DETERMINACIÓN DE CONFIANZA Y VEREDICTO:
+1. DATOS INSUFICIENTES (0 conversaciones): verdict: "reconsider", confidence_level: "insufficient", confidence_percentage: 0.
+2. DATOS LIMITADOS (1-4 conversaciones): confidence_level: "low", confidence_percentage: Min(35, total_conv * 8).
+3. DATOS MEDIOS (5-14 conversaciones): confidence_level: "medium", confidence_percentage: 35 + (total_conv - 5) * 5.
+4. DATOS SUFICIENTES (15+ conversaciones): confidence_level: "high", confidence_percentage: Min(95, 70 + (total_conv - 15) * 1.5).
+
+RULES:
+- Search ALL listed platforms, not just Reddit.
+- Be analytical and serious. Avoid hype words like "viral" or "magical".
+- Focus on "reduction of risk" and "informed decisions".
+- Include specific platform names in sources_analyzed.
+- MANDATORY: Each source in "sources_analyzed" with discussions_found > 0 MUST include 2-3 REAL, FUNCTIONAL URLs in the "citations" field. For YouTube, provide direct links to the videos (e.g., https://www.youtube.com/watch?v=...).
+- If a platform has no relevant discussions, still include it with discussions_found: 0.
+- Response must start with { and end with }. No other text.`;
+
+    try {
+        const response = await fetch("https://api.perplexity.ai/chat/completions", {
+            method: "POST",
+            headers: {
+                "Authorization": `Bearer ${apiKey}`,
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                model: "sonar",
+                messages: [
+                    {
+                        role: "system",
+                        content: "Eres un API de investigación de mercado. Responde EXCLUSIVAMENTE con JSON válido."
+                    },
+                    { role: "user", content: systemPrompt }
+                ],
+                temperature: 0.2
+            })
+        });
+
+        if (!response.ok) {
+            const errorText = await response.text();
+            throw new Error(`Perplexity API error: ${response.status} ${errorText}`);
+        }
+
+        const data = await response.json();
+        const content = data.choices[0]?.message?.content;
+
+        if (!content) {
+            throw new Error("Empty response from Perplexity");
+        }
+
+        let cleanContent = content.replace(/```json\n?|\n?```/g, "").trim();
+
+        if (!cleanContent.startsWith("{")) {
+            console.warn("[perplexity] Response doesn't start with JSON, attempting to extract");
+            const jsonMatch = cleanContent.match(/\{[\s\S]*\}/);
+            if (jsonMatch) {
+                cleanContent = jsonMatch[0];
+            } else {
+                console.error("[perplexity] Could not extract JSON from response:", cleanContent);
+                throw new Error("Perplexity returned non-JSON response. Please try again.");
+            }
+        }
+
+        const parsed = JSON.parse(cleanContent);
+        return parsed;
+
+    } catch (error: any) {
+        console.error("[perplexity] Validation failed:", error);
+        console.error("[perplexity] Error message:", error?.message);
+        throw error;
+    }
 }
