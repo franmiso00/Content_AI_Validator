@@ -1,7 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { ArrowRight, CheckCircle2 } from "lucide-react";
-import Link from "next/link";
 
 export function CTASection() {
     const benefits = [
@@ -50,12 +49,13 @@ export function CTASection() {
                                 <Button
                                     size="lg"
                                     className="bg-blue-600 hover:bg-blue-700 text-white text-lg px-10 py-6 rounded-2xl shadow-xl font-bold"
-                                    asChild
+                                    onClick={() => {
+                                        const element = document.getElementById("validate-form");
+                                        element?.scrollIntoView({ behavior: "smooth" });
+                                    }}
                                 >
-                                    <Link href="/auth/signup">
-                                        Valida tu próxima idea ahora
-                                        <ArrowRight className="ml-2 h-5 w-5" />
-                                    </Link>
+                                    Valida tu próxima idea ahora
+                                    <ArrowRight className="ml-2 h-5 w-5" />
                                 </Button>
                             </div>
 

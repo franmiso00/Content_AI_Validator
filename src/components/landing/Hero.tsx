@@ -115,7 +115,7 @@ export function Hero({ onValidate, isValidating, initialTopic = "" }: HeroProps)
     };
 
     return (
-        <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden pt-24 pb-16 bg-slate-50">
+        <section id="validate-form" className="relative min-h-[90vh] flex items-center justify-center overflow-hidden pt-24 pb-16 bg-slate-50">
             {/* Background elements */}
             <div className="absolute top-0 right-0 w-1/2 h-1/2 bg-gradient-to-br from-sky-500/5 to-transparent rounded-full blur-3xl animate-blob"></div>
             <div className="absolute bottom-0 left-0 w-1/2 h-1/2 bg-gradient-to-tr from-cyan-500/5 to-transparent rounded-full blur-3xl animate-blob animation-delay-2000"></div>
