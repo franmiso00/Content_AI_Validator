@@ -134,3 +134,72 @@ export async function getValidationsPerDay() {
 
     return Object.entries(counts).map(([date, count]) => ({ date, count }));
 }
+
+export async function getAnonymousUsersStats() {
+    const isAdmin = await checkAdminAccess();
+    if (!isAdmin) throw new Error("Unauthorized");
+
+    const supabase = await createClient();
+
+    // Fetch all anonymous usage
+    // Note: In a production app with millions of rows, this should be done via SQL View or RPC.
+    // For now, we aggregate in JS.
+    const { data: usageData, error: usageError } = await supabase
+        .from("anonymous_usage")
+        .select("client_id, created_at")
+        .order('created_at', { ascending: false });
+
+    if (usageError) throw usageError;
+
+    const { data: earlyAdopters, error: eaError } = await supabase
+        .from("early_adopters")
+        .select("client_id");
+
+    if (eaError) throw eaError;
+
+    const earlyAdopterIds = new Set(earlyAdopters?.map(ea => ea.client_id) || []);
+
+    const userStats = new Map<string, {
+        client_id: string;
+        total_requests: number;
+        last_request: string;
+        first_request: string;
+        is_early_adopter: boolean;
+    }>();
+
+    usageData?.forEach(usage => {
+        const current = userStats.get(usage.client_id) || {
+            client_id: usage.client_id,
+            total_requests: 0,
+            last_request: usage.created_at,
+            first_request: usage.created_at,
+            is_early_adopter: earlyAdopterIds.has(usage.client_id)
+        };
+
+        current.total_requests++;
+        if (new Date(usage.created_at) > new Date(current.last_request)) {
+            current.last_request = usage.created_at;
+        }
+        if (new Date(usage.created_at) < new Date(current.first_request)) {
+            current.first_request = usage.created_at;
+        }
+
+        userStats.set(usage.client_id, current);
+    });
+
+    const FREE_LIMIT = 3;
+    const EARLY_ADOPTER_LIMIT = 8; // 3 + 5
+
+    return Array.from(userStats.values()).map(stat => {
+        const limit = stat.is_early_adopter ? EARLY_ADOPTER_LIMIT : FREE_LIMIT;
+        const remaining = Math.max(0, limit - stat.total_requests);
+        const avg_requests_per_day = 0; // simplistic, maybe add diff between first and last
+
+        return {
+            ...stat,
+            limit,
+            remaining,
+            status: remaining <= 0 ? 'Exhausted' : 'Active'
+        };
+    }).sort((a, b) => new Date(b.last_request).getTime() - new Date(a.last_request).getTime());
+}
