@@ -22,6 +22,7 @@ import {
     CheckCircle2
 } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
+import { trackEvent } from "@/lib/analytics";
 
 interface ValidationInput {
     topic: string;
@@ -85,6 +86,15 @@ export function Hero({ onValidate, isValidating, initialTopic = "" }: HeroProps)
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         if (topic.trim()) {
+            trackEvent({
+                action: 'validate_idea_attempt',
+                category: 'validation',
+                label: contentType,
+                topic_length: topic.length,
+                objective: objective,
+                audience_level: audienceLevel
+            });
+
             const messages = t.raw("form.loadingMessages") as string[];
             let i = 0;
             const interval = setInterval(() => {

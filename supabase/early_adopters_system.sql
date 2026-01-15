@@ -12,14 +12,17 @@ CREATE TABLE IF NOT EXISTS early_adopters (
     email TEXT NOT NULL UNIQUE,
     client_id TEXT NOT NULL,
     
-    -- Datos de encuesta (para investigación de mercado)
-    role TEXT NOT NULL CHECK (role IN ('creator', 'marketer', 'founder', 'agency', 'other')),
-    content_frequency TEXT CHECK (content_frequency IN ('daily', 'weekly', 'monthly', 'occasionally')),
-    biggest_challenge TEXT NOT NULL CHECK (biggest_challenge IN ('ideas', 'time', 'conversion', 'consistency')),
-    how_did_you_find TEXT CHECK (how_did_you_find IN ('twitter', 'linkedin', 'google', 'friend', 'other')),
+    -- Nuevos campos (Simplificados)
+    full_name TEXT,
+    niche TEXT,
+    registration_reason TEXT,
     
-    -- Posición en la lista de espera
-    position INTEGER NOT NULL,
+    -- Legacy / Opcionales (Nullable now)
+    role TEXT CHECK (role IN ('creator', 'marketer', 'founder', 'agency', 'other')),
+    content_frequency TEXT CHECK (content_frequency IN ('daily', 'weekly', 'monthly', 'occasionally')),
+    biggest_challenge TEXT CHECK (biggest_challenge IN ('ideas', 'time', 'conversion', 'consistency')),
+    how_did_you_find TEXT CHECK (how_did_you_find IN ('twitter', 'linkedin', 'google', 'friend', 'other')),
+    position INTEGER,
     
     -- Datos de analytics
     ip_address TEXT,

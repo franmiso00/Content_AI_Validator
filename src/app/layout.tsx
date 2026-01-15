@@ -4,6 +4,7 @@ import "./globals.css";
 import { ToasterProvider } from "@/components/providers/toaster-provider";
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getMessages } from "next-intl/server";
+import { GoogleAnalytics } from '@next/third-parties/google';
 
 const dmSans = DM_Sans({
   subsets: ["latin"],
@@ -37,6 +38,9 @@ export default async function RootLayout({
           {children}
           <ToasterProvider />
         </NextIntlClientProvider>
+        {process.env.NEXT_PUBLIC_GA_ID && (
+          <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID} />
+        )}
       </body>
     </html>
   );

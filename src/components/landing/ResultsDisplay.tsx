@@ -32,6 +32,7 @@ import { ConfidenceBar } from "./ConfidenceBar";
 import { VerdictIndeterminate } from "./VerdictIndeterminate";
 import { LowConfidenceWarning } from "./LowConfidenceWarning";
 import { ValidationResult, VerdictStatus } from "@/lib/perplexity";
+import { trackEvent } from "@/lib/analytics";
 import { usePDFDownload } from "@/hooks/use-pdf-download";
 
 interface ResultsDisplayProps {
@@ -65,7 +66,23 @@ export function ResultsDisplay({
         if (containerRef.current) {
             containerRef.current.scrollIntoView({ behavior: "smooth" });
         }
-    }, []);
+
+        // Track view result
+        trackEvent({
+            action: 'validate_idea_result',
+            category: 'result',
+            label: result.strategic_recommendation.verdict,
+            demand_score: result.demand_score,
+            topic: initialTopic
+        });
+
+        trackEvent({
+            action: 'verdict_viewed',
+            category: 'verdict',
+            label: result.strategic_recommendation.verdict
+        });
+
+    }, [result, initialTopic]);
 
     const handleReformulate = (newTopic: string) => {
         if (onReformulate) {
@@ -73,6 +90,24 @@ export function ResultsDisplay({
         } else {
             onRestart();
         }
+    };
+
+    const handleDownload = async () => {
+        trackEvent({
+            action: 'pdf_downloaded',
+            category: 'engagement',
+            label: initialTopic
+        });
+        await downloadPDF();
+    };
+
+    const handleJoinWaitlist = () => {
+        trackEvent({
+            action: 'lead_captured',
+            category: 'conversion',
+            label: 'waitlist_click'
+        });
+        if (onJoinWaitlist) onJoinWaitlist();
     };
 
     // CASE: INDETERMINATE (0 conversations)
@@ -638,7 +673,7 @@ export function ResultsDisplay({
 
                                 <div className="flex flex-col sm:flex-row gap-4 justify-center">
                                     <Button
-                                        onClick={onJoinWaitlist}
+                                        onClick={handleJoinWaitlist}
                                         size="lg"
                                         className="bg-sky-500 hover:bg-sky-600 text-white text-lg h-16 px-10 rounded-2xl font-black shadow-xl shadow-sky-500/20 transition-all active:scale-95 border-0"
                                     >
@@ -646,7 +681,7 @@ export function ResultsDisplay({
                                         <ArrowRight className="ml-2 h-5 w-5" />
                                     </Button>
                                     <Button
-                                        onClick={downloadPDF}
+                                        onClick={handleDownload}
                                         disabled={isGenerating}
                                         size="lg"
                                         variant="outline"

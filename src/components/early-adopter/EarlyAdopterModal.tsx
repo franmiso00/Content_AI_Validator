@@ -25,6 +25,7 @@ import {
     Loader2
 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
+import { trackEvent } from "@/lib/analytics";
 
 interface EarlyAdopterModalProps {
     open: boolean;
@@ -88,6 +89,12 @@ export function EarlyAdopterModal({
             }
 
             setIsSuccess(true);
+            trackEvent({
+                action: 'lead_captured',
+                category: 'conversion',
+                label: 'early_adopter_form',
+                reason: reason
+            });
             onSuccess();
         } catch (err) {
             toast.error(t("errors.generic"));
