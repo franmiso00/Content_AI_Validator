@@ -7,6 +7,7 @@ import { ResultsDisplay } from "@/components/landing/ResultsDisplay";
 import { EarlyAdopterModal } from "@/components/early-adopter/EarlyAdopterModal";
 import { ValidationCounter } from "@/components/early-adopter/ValidationCounter";
 import { useValidationLimit } from "@/hooks/use-validation-limit";
+import { useSmartPopup } from "@/hooks/use-smart-popup";
 import { toast } from "sonner";
 import ValioLogo from "@/components/ui/ValioLogo";
 import { FAQSection } from "@/components/landing/FAQSection";
@@ -126,6 +127,9 @@ export default function LandingPage() {
 
   const handleEarlyAdopterSuccess = () => {
     grantEarlyAdopterBonus();
+    if (typeof window !== "undefined") {
+      localStorage.setItem("valio_early_access_registered", "true");
+    }
     toast.success(tCommon("toasts.bonusUnlocked"));
   };
 
@@ -141,6 +145,17 @@ export default function LandingPage() {
     setValidatedTopic("");
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
+
+  // Smart Popup Logic
+  const { markAsDismissed } = useSmartPopup({
+    isLimited: remaining === 0, // Considered limited if 0 remaining
+    isEarlyAdopter,
+    isValidating,
+    onTrigger: () => {
+      setModalReason("voluntary");
+      setShowEarlyAdopterModal(true);
+    },
+  });
 
   return (
     <div className="min-h-screen bg-slate-50">
@@ -193,7 +208,12 @@ export default function LandingPage() {
         {/* Early Adopter Modal */}
         <EarlyAdopterModal
           open={showEarlyAdopterModal}
-          onOpenChange={setShowEarlyAdopterModal}
+          onOpenChange={(open) => {
+            setShowEarlyAdopterModal(open);
+            if (!open) {
+              markAsDismissed();
+            }
+          }}
           clientId={fingerprint}
           maxFreeValidations={3}
           onSuccess={handleEarlyAdopterSuccess}
