@@ -97,7 +97,7 @@ export interface ValidationResult {
   content_angles: {
     format: string;
     hook: string;
-    complexity: "básico" | "avanzado";
+    complexity: "básico" | "avanzado" | "basic" | "advanced"; // Support both languages
     description: string;
     best_platform_to_publish: string;  // NEW
   }[];
@@ -148,7 +148,7 @@ Output ONLY a valid JSON object. Do not include markdown, code blocks, or explan
 Required JSON Structure:
 {
   "demand_score": <number 0-100>,
-  "demand_interpretation": "<short semantic category: e.g. 'Demanda sólida en nicho emergente'>",
+  "demand_interpretation": "<short semantic category: e.g. 'Strong demand in emerging niche'>",
   "demand_summary": "<2-sentence overview of market state across all platforms>",
   
   "format_assessment": {
@@ -192,8 +192,8 @@ Required JSON Structure:
   "data_signals": {
     "total_conversations_analyzed": <total number across all platforms>,
     "primary_platform": "<platform with most relevant discussions>",
-    "recency": "<freshness of data, e.g. 'frecuente últimos 60 días'>",
-    "engagement_type": "<primary type: preguntas, quejas, debates, tutoriales>"
+    "recency": "<freshness of data, e.g. 'frequent last 60 days'>",
+    "engagement_type": "<primary type: questions, complaints, debates, tutorials>"
   },
   
   "business_impact": {
@@ -222,7 +222,7 @@ Required JSON Structure:
     {
       "format": "<recommended format: newsletter, guide, video script, thread>",
       "hook": "<main hook/headline idea>",
-      "complexity": "básico" | "avanzado",
+      "complexity": "basic" | "advanced",
       "description": "<actionable description>",
       "best_platform_to_publish": "<where this would perform best>"
     }
@@ -242,17 +242,17 @@ Required JSON Structure:
   "suggestions": [
      {
        "type": "broader_terms" | "alternative_keywords" | "different_angle" | "other_sources",
-       "suggestion": "<descripción breve>",
-       "example": "<ejemplo de nueva búsqueda>"
+       "suggestion": "<brief description>",
+       "example": "<example of new search query>"
      }
   ]
 }
 
-### LÓGICA DE DETERMINACIÓN DE CONFIANZA Y VEREDICTO:
-1. DATOS INSUFICIENTES (0 conversaciones): verdict: "reconsider", confidence_level: "insufficient", confidence_percentage: 0.
-2. DATOS LIMITADOS (1-4 conversaciones): confidence_level: "low", confidence_percentage: Min(35, total_conv * 8).
-3. DATOS MEDIOS (5-14 conversaciones): confidence_level: "medium", confidence_percentage: 35 + (total_conv - 5) * 5.
-4. DATOS SUFICIENTES (15+ conversaciones): confidence_level: "high", confidence_percentage: Min(95, 70 + (total_conv - 15) * 1.5).
+### CONFIDENCE AND VERDICT DETERMINATION LOGIC:
+1. INSUFFICIENT DATA (0 conversations): verdict: "reconsider", confidence_level: "insufficient", confidence_percentage: 0.
+2. LIMITED DATA (1-4 conversations): confidence_level: "low", confidence_percentage: Min(35, total_conv * 8).
+3. MEDIUM DATA (5-14 conversations): confidence_level: "medium", confidence_percentage: 35 + (total_conv - 5) * 5.
+4. SUFFICIENT DATA (15+ conversations): confidence_level: "high", confidence_percentage: Min(95, 70 + (total_conv - 15) * 1.5).
 
 RULES:
 - Search ALL listed platforms, not just Reddit.
@@ -275,7 +275,7 @@ RULES:
         messages: [
           {
             role: "system",
-            content: "Eres un API de investigación de mercado. Responde EXCLUSIVAMENTE con JSON válido."
+            content: "You are a market research API. Respond EXCLUSIVELY with valid JSON."
           },
           { role: "user", content: systemPrompt }
         ],
