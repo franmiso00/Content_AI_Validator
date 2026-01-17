@@ -6,7 +6,8 @@ interface ValioLogoProps {
 }
 
 const ValioLogo = ({ size = 32, variant = 'default' }: ValioLogoProps) => {
-    const gradientId = `valio-grad-${Math.random().toString(36).substr(2, 9)}`;
+    const id = React.useId();
+    const gradientId = `valio-grad-${id}`;
 
     return (
         <div className="flex items-center gap-2">

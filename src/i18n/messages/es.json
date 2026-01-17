@@ -47,7 +47,7 @@
             "joinWaitlist": "Unirme al Early Access"
         },
         "hero": {
-            "badge": "Validación basada en señales, no en intuición",
+            "badge": "Validación basada en señales no en intuición",
             "title": "Deja de crear contenido",
             "titleGradient": "que nadie busca",
             "subtitle": "Analizamos señales de demanda real en comunidades activas para que valides tu idea antes de invertir tiempo en crearla.",
@@ -104,6 +104,81 @@
                     "SaaS founders",
                     "Salud"
                 ]
+            }
+        },
+        "outcome": {
+            "prefix": "Valida ideas para conseguir",
+            "title": {
+                "leads": "leads cualificados",
+                "conversion": "ventas reales",
+                "authority": "autoridad en tu nicho",
+                "retention": "retención de audiencia",
+                "clients": "decisiones sólidas para clientes"
+            },
+            "cards": {
+                "leads": {
+                    "title": "Generar Leads",
+                    "desc": "Valida contenido que atrae clientes potenciales.",
+                    "tooltip": {
+                        "what": "Contenido diseño para captar datos de contacto.",
+                        "when": "Buscas aumentar tu lista de email o pipeline.",
+                        "not_when": "Solo buscas 'likes' o alcance masivo.",
+                        "examples": "Lead magnets, webinars, guías descargables."
+                    }
+                },
+                "conversion": {
+                    "title": "Ventas Reales",
+                    "desc": "Ideas con alta intención de compra.",
+                    "tooltip": {
+                        "what": "Contenido que empuja al usuario a comprar.",
+                        "when": "Lanzamientos, páginas de venta, ofertas.",
+                        "not_when": "Tu audiencia aún no confía en ti.",
+                        "examples": "Casos de estudio, comparativas, demos."
+                    }
+                },
+                "authority": {
+                    "title": "Autoridad de Nicho",
+                    "desc": "Posiciónate como el experto referente.",
+                    "tooltip": {
+                        "what": "Contenido que demuestra expertise profundo.",
+                        "when": "Buscas confianza a largo plazo y respeto.",
+                        "not_when": "Necesitas ventas rápidas hoy mismo.",
+                        "examples": "Análisis técnicos, opinión experta, tendencias."
+                    }
+                },
+                "retention": {
+                    "title": "Retención",
+                    "desc": "Fideliza a tu audiencia actual.",
+                    "tooltip": {
+                        "what": "Contenido para usuarios que ya te conocen.",
+                        "when": "Quieres reducir churn o aumentar LTV.",
+                        "not_when": "Estás buscando nueva audiencia en frío.",
+                        "examples": "Tutoriales avanzados, novedades, uso de producto."
+                    }
+                },
+                "clients": {
+                    "title": "Para Clientes",
+                    "desc": "Respalda tus estrategias con datos.",
+                    "tooltip": {
+                        "what": "Validación para terceros (agencias/consultores).",
+                        "when": "Defiendes una propuesta ante un cliente.",
+                        "not_when": "Es un proyecto personal sin stakeholders.",
+                        "examples": "Estrategias de contenido, auditorías, pitch."
+                    }
+                }
+            },
+            "tooltip_labels": {
+                "what": "Qué es",
+                "when": "Cuándo usarlo",
+                "not_when": "Cuándo no",
+                "examples": "Ejemplos"
+            },
+            "placeholders": {
+                "leads": "Ej: Lead magnet para abogados que usan IA",
+                "conversion": "Ej: Página de ventas para curso de productividad",
+                "authority": "Ej: Análisis profundo sobre el futuro del SaaS",
+                "retention": "Ej: Tutorial avanzado de configuración para usuarios",
+                "clients": "Ej: Estrategia de contenidos para sector inmobiliario"
             }
         },
         "faq": {

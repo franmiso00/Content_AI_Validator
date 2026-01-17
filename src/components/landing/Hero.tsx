@@ -23,6 +23,7 @@ import {
 } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { trackEvent } from "@/lib/analytics";
+import { OutcomeEntrySection, UseCaseId } from "./OutcomeEntrySection";
 
 interface ValidationInput {
     topic: string;
@@ -30,6 +31,7 @@ interface ValidationInput {
     contentType: string;
     objective: string;
     audienceLevel: string;
+    useCase?: string;
 }
 
 interface HeroProps {
@@ -49,12 +51,7 @@ const CONTENT_TYPES = [
     { id: "guide", labelKey: "types.guide", icon: BookOpen },
 ];
 
-const OBJECTIVES = [
-    { id: "leads", labelKey: "objectives.leads", color: "bg-sky-50 text-sky-700 border-sky-200" },
-    { id: "sales", labelKey: "objectives.sales", color: "bg-emerald-50 text-emerald-700 border-emerald-200" },
-    { id: "authority", labelKey: "objectives.authority", color: "bg-slate-100 text-slate-700 border-slate-200" },
-    { id: "awareness", labelKey: "objectives.awareness", color: "bg-amber-50 text-amber-700 border-amber-200" },
-];
+
 
 const AUDIENCE_LEVELS = [
     { id: "beginner", labelKey: "levels.beginner" },
@@ -62,9 +59,12 @@ const AUDIENCE_LEVELS = [
     { id: "advanced", labelKey: "levels.advanced" },
 ];
 
+
+
 export function Hero({ onValidate, isValidating, initialTopic = "" }: HeroProps) {
     const t = useTranslations("landing.hero");
     const tCommon = useTranslations("common");
+    const tOutcome = useTranslations("landing.outcome");
     const TOPIC_EXAMPLES = t.raw("examples.topics") as string[];
     const AUDIENCE_EXAMPLES = t.raw("examples.audiences") as string[];
     const [topic, setTopic] = useState(initialTopic);
@@ -80,6 +80,32 @@ export function Hero({ onValidate, isValidating, initialTopic = "" }: HeroProps)
     const [objective, setObjective] = useState("authority");
     const [audienceLevel, setAudienceLevel] = useState("intermediate");
     const [showAdvanced, setShowAdvanced] = useState(false);
+    const [useCase, setUseCase] = useState<UseCaseId>("leads");
+
+    // Sync objective with useCase to ensure backend compatibility
+    useEffect(() => {
+        switch (useCase) {
+            case "leads":
+                setObjective("leads");
+                break;
+            case "conversion":
+            case "clients":
+                setObjective("sales");
+                break;
+            case "authority":
+            case "retention":
+                setObjective("authority");
+                break;
+            default:
+                setObjective("authority");
+        }
+    }, [useCase]);
+
+    // Dynamic placeholders based on useCase
+    const getPlaceholder = (uc: string) => {
+        // @ts-ignore - Dynamic key access
+        return tOutcome(`placeholders.${uc}`);
+    };
 
     const [loadingMessage, setLoadingMessage] = useState(t("form.validating"));
 
@@ -107,7 +133,8 @@ export function Hero({ onValidate, isValidating, initialTopic = "" }: HeroProps)
                 audience,
                 contentType,
                 objective,
-                audienceLevel
+                audienceLevel,
+                useCase
             });
 
             setTimeout(() => clearInterval(interval), 30000);
@@ -122,21 +149,10 @@ export function Hero({ onValidate, isValidating, initialTopic = "" }: HeroProps)
 
             <div className="relative z-10 container mx-auto px-4 text-center">
                 <div className="max-w-4xl mx-auto space-y-12">
-                    <div className="space-y-6">
-                        <div className="inline-flex items-center gap-2 bg-sky-100 px-4 py-2 rounded-full text-sky-700 text-xs font-bold uppercase tracking-wider mb-2">
-                            <CheckCircle2 className="h-4 w-4" />
-                            {t("badge")}
-                        </div>
-
-                        <h1 className="text-4xl md:text-6xl font-bold text-slate-900 leading-[1.1] tracking-tight">
-                            {t("title")}<br />
-                            <span className="bg-gradient-to-r from-sky-500 to-cyan-500 bg-clip-text text-transparent">{t("titleGradient")}</span>
-                        </h1>
-
-                        <p className="text-lg md:text-xl text-slate-500 max-w-2xl mx-auto leading-relaxed">
-                            {t("subtitle")}
-                        </p>
-                    </div>
+                    <OutcomeEntrySection
+                        onSelect={(uc) => setUseCase(uc)}
+                        selectedUseCase={useCase}
+                    />
 
                     <Card className="border border-slate-200 shadow-xl shadow-slate-900/5 bg-white rounded-3xl overflow-hidden max-w-3xl mx-auto">
                         <CardContent className="p-6 md:p-10">
@@ -149,7 +165,7 @@ export function Hero({ onValidate, isValidating, initialTopic = "" }: HeroProps)
                                     </label>
                                     <Input
                                         className="text-lg px-4 py-6 border-2 border-slate-100 focus:border-sky-500 focus:ring-4 focus:ring-sky-500/10 rounded-xl bg-slate-50 transition-all duration-200"
-                                        placeholder={t("form.topicPlaceholder")}
+                                        placeholder={getPlaceholder(useCase)}
                                         value={topic}
                                         onChange={(e) => setTopic(e.target.value)}
                                         disabled={isValidating}
@@ -224,46 +240,24 @@ export function Hero({ onValidate, isValidating, initialTopic = "" }: HeroProps)
 
                                 {showAdvanced && (
                                     <div className="space-y-6 pt-2 animate-in fade-in slide-in-from-top-4 duration-300">
-                                        <div className="grid md:grid-cols-2 gap-6">
-                                            <div className="space-y-3">
-                                                <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest flex items-center gap-2">
-                                                    {t("form.objective")}
-                                                </label>
-                                                <div className="grid grid-cols-2 gap-2">
-                                                    {OBJECTIVES.map((obj) => (
-                                                        <button
-                                                            key={obj.id}
-                                                            type="button"
-                                                            onClick={() => setObjective(obj.id)}
-                                                            className={`p-2 rounded-lg border-2 transition-all font-bold text-[10px] ${objective === obj.id
-                                                                ? `${obj.color} border-current`
-                                                                : "border-slate-100 bg-white text-slate-500 hover:border-slate-200"
-                                                                }`}
-                                                        >
-                                                            {t(obj.labelKey)}
-                                                        </button>
-                                                    ))}
-                                                </div>
-                                            </div>
-                                            <div className="space-y-3">
-                                                <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest flex items-center gap-2">
-                                                    {t("form.audienceLevel")}
-                                                </label>
-                                                <div className="flex gap-2">
-                                                    {AUDIENCE_LEVELS.map((level) => (
-                                                        <button
-                                                            key={level.id}
-                                                            type="button"
-                                                            onClick={() => setAudienceLevel(level.id)}
-                                                            className={`flex-1 p-2 rounded-lg border-2 transition-all font-bold text-[10px] ${audienceLevel === level.id
-                                                                ? "border-slate-900 bg-slate-900 text-white"
-                                                                : "border-slate-100 bg-white text-slate-500 hover:border-slate-200"
-                                                                }`}
-                                                        >
-                                                            {t(level.labelKey)}
-                                                        </button>
-                                                    ))}
-                                                </div>
+                                        <div className="space-y-3">
+                                            <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest flex items-center gap-2">
+                                                {t("form.audienceLevel")}
+                                            </label>
+                                            <div className="flex gap-2">
+                                                {AUDIENCE_LEVELS.map((level) => (
+                                                    <button
+                                                        key={level.id}
+                                                        type="button"
+                                                        onClick={() => setAudienceLevel(level.id)}
+                                                        className={`flex-1 p-2 rounded-lg border-2 transition-all font-bold text-[10px] ${audienceLevel === level.id
+                                                            ? "border-slate-900 bg-slate-900 text-white"
+                                                            : "border-slate-100 bg-white text-slate-500 hover:border-slate-200"
+                                                            }`}
+                                                    >
+                                                        {t(level.labelKey)}
+                                                    </button>
+                                                ))}
                                             </div>
                                         </div>
                                     </div>

@@ -106,6 +106,81 @@
                 ]
             }
         },
+        "outcome": {
+            "prefix": "Validate ideas to get",
+            "title": {
+                "leads": "qualified leads",
+                "conversion": "real sales",
+                "authority": "niche authority",
+                "retention": "audience retention",
+                "clients": "solid client decisions"
+            },
+            "cards": {
+                "leads": {
+                    "title": "Generate Leads",
+                    "desc": "Validate content that attracts potential customers.",
+                    "tooltip": {
+                        "what": "Content designed to capture contact details.",
+                        "when": "You want to grow your email list or pipeline.",
+                        "not_when": "You only want 'likes' or massive reach.",
+                        "examples": "Lead magnets, webinars, downloadable guides."
+                    }
+                },
+                "conversion": {
+                    "title": "Real Sales",
+                    "desc": "Ideas with high purchase intent.",
+                    "tooltip": {
+                        "what": "Content that drives users to buy.",
+                        "when": "Launches, sales pages, offers.",
+                        "not_when": "Your audience doesn't trust you yet.",
+                        "examples": "Case studies, comparisons, demos."
+                    }
+                },
+                "authority": {
+                    "title": "Niche Authority",
+                    "desc": "Position yourself as the go-to expert.",
+                    "tooltip": {
+                        "what": "Content demonstrating deep expertise.",
+                        "when": "Building long-term trust and respect.",
+                        "not_when": "You need quick sales today.",
+                        "examples": "Technical analysis, expert opinion, trends."
+                    }
+                },
+                "retention": {
+                    "title": "Retention",
+                    "desc": "Retain your current audience.",
+                    "tooltip": {
+                        "what": "Content for users who already know you.",
+                        "when": "Reducing churn or increasing LTV.",
+                        "not_when": "Looking for cold new audience.",
+                        "examples": "Advanced tutorials, news, product usage."
+                    }
+                },
+                "clients": {
+                    "title": "For Clients",
+                    "desc": "Back your strategies with data.",
+                    "tooltip": {
+                        "what": "Validation for third parties (agencies/consultants).",
+                        "when": "Defending a proposal to a client.",
+                        "not_when": "Personal project without stakeholders.",
+                        "examples": "Content strategies, audits, pitches."
+                    }
+                }
+            },
+            "tooltip_labels": {
+                "what": "What is it",
+                "when": "When to use",
+                "not_when": "When not to",
+                "examples": "Examples"
+            },
+            "placeholders": {
+                "leads": "Ex: Lead magnet for lawyers using AI",
+                "conversion": "Ex: Sales page for productivity course",
+                "authority": "Ex: Deep dive on the future of SaaS",
+                "retention": "Ex: Advanced configuration tutorial for users",
+                "clients": "Ex: Content strategy for real estate sector"
+            }
+        },
         "faq": {
             "badge": "FAQ",
             "title": "Clear your doubts",

@@ -5,6 +5,7 @@ export interface ValidationInput {
   objective?: string;        // leads | sales | authority | awareness
   audienceLevel?: string;    // beginner | intermediate | advanced
   language?: string;         // 'es', 'en', 'fr'
+  useCase?: string;          // leads | conversion | authority | retention | clients
 }
 
 export interface FormatAssessment {
@@ -118,7 +119,7 @@ const LANGUAGE_NAMES: Record<string, string> = {
 const apiKey = process.env.PERPLEXITY_API_KEY;
 
 export async function validateIdea(input: ValidationInput): Promise<ValidationResult> {
-  const { topic, audience, contentType, objective, audienceLevel, language = 'es' } = input;
+  const { topic, audience, contentType, objective, audienceLevel, language = 'es', useCase } = input;
 
   const targetLanguage = LANGUAGE_NAMES[language] || "SPANISH";
 
@@ -130,6 +131,7 @@ Topic: "${topic}"
 Target Audience: "${audience || "General"}"
 Chosen Format: "${contentType || "Not specified"}"
 Chosen Objective: "${objective || "Not specified"}"
+Chosen Strategic Outcome (Use Case): "${useCase || "leads"}"
 Chosen Audience Level: "${audienceLevel || "Not specified"}"
 
 PLATFORMS TO SEARCH (in order of priority):
